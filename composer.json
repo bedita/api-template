@@ -1,0 +1,46 @@
+{
+    "name": "bedita/my-app-api",
+    "type": "project",
+    "description": "REST API for MyApp",
+    "homepage": "https://www.bedita.com",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2",
+        "bedita/core": "dev-4-cactus",
+        "bedita/api": "dev-4-cactus",
+        "bedita/aws": "^1.0",
+        "cakephp/cakephp": "~3.10.0",
+        "cakephp/plugin-installer": "^1.3"
+    },
+    "require-dev": {
+        "cakephp/bake": "^1.12",
+        "cakephp/debug_kit": "^3.23.0",
+        "cakephp/cakephp-codesniffer": "~3.2.1",
+        "psy/psysh": "@stable",
+        "bedita/dev-tools": "1.4.*",
+        "phpunit/phpunit": "^6.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "MyApp\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MyApp\\Test\\": "tests",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": "MyApp\\Console\\Installer::postInstall",
+        "post-update-cmd": "MyApp\\Console\\Installer::postInstall",
+        "post-create-project-cmd": "MyApp\\Console\\Installer::postInstall",
+        "check": [
+            "@test",
+            "@cs-check"
+        ],
+        "cs-check": "vendor/bin/phpcs -p src/ tests/ config/*.php",
+        "cs-fix": "vendor/bin/phpcbf -p src/ tests/ config/*.php",
+        "test": "vendor/bin/phpunit --colors=always"
+    }
+}

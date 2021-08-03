@@ -1,0 +1,53 @@
+# User specific & automatically generated files #
+#################################################
+/config/app_local.php
+/config/.env
+/logs/*
+/tmp/*
+/vendor/*
+/composer.local.json
+/config/Migrations/schema-dump-default.lock
+/coverage
+/webroot/_files/*
+!/webroot/_files/.gitkeep
+
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+.directory
+
+# Tool specific files #
+#######################
+# vim
+*~
+*.swp
+*.swo
+# sublime text & textmate
+*.sublime-*
+*.stTheme.cache
+*.tmlanguage.cache
+*.tmPreferences.cache
+# Eclipse
+.settings/*
+# JetBrains, aka PHPStorm, IntelliJ IDEA
+.idea/*
+# NetBeans
+nbproject/*
+# Visual Studio Code
+.vscode
+# Sass preprocessor
+.sass-cache/
+/nbproject
+/tags
+.project
+.buildpath
+.history
+
