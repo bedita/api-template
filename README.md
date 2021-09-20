@@ -1,51 +1,48 @@
-# CakePHP Application Skeleton
+# BEdita API template
 
-[![Build Status](https://img.shields.io/travis/cakephp/app/master.svg?style=flat-square)](https://travis-ci.org/cakephp/app)
-[![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
+This is the skeleton app to build BEdita4 API projects.
 
-A skeleton for creating applications with [CakePHP](https://cakephp.org) 3.x.
+## Requirements
 
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
+1. PHP >= 7.2
+1. Download latest [Composer](https://getcomposer.org/doc/00-intro.md) or update via `composer self-update`.
 
 ## Installation
 
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
-
-If Composer is installed globally, run
+Simply run
 
 ```bash
-composer create-project --prefer-dist "cakephp/app:^3.8"
+composer create-project bedita/api-template
 ```
 
-In case you want to use a custom app dir name (e.g. `/myapp/`):
+In case you want to use a custom app dir name (e.g. `myapp/`):
 
 ```bash
-composer create-project --prefer-dist "cakephp/app:^3.8" myapp
+composer create-project bedita/api-template myapp
 ```
 
 You can now either use your machine's webserver to view the default home page, or start
 up the built-in webserver with:
 
 ```bash
-bin/cake server -p 8765
+bin/cake server
 ```
 
 Then visit `http://localhost:8765` to see the welcome page.
 
-## Update
-
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
-
 ## Configuration
 
-Read and edit `config/app.php` and setup the `'Datasources'` and any other
-configuration relevant for your application.
+Review and edit accordingly every configuration item in  `config/app_local.php`.
+Make sure at least `Datasources` points to the desired DB instance.
 
-## Layout
+## Namespace
 
-The app skeleton uses a subset of [Foundation](http://foundation.zurb.com/) (v5) CSS
-framework by default. You can, however, replace it with any other library or
-custom styles.
+You need to manually change the default `MyApp` namespace in order to use a custom one (recommended before any application logic is introduced).
+
+Files referencing `MyApp` are:
+
+* `composer.json`
+* `bin/cake.php`
+* `config/app.php` or override in `config/app_local.php`
+* `Application.php` (and `test/TestCase/ApplicationTest.php`)
+* `webroot/index.php`
