@@ -1,7 +1,7 @@
 {
-    "name": "bedita/my-app-api",
+    "name": "bedita/api-template",
     "type": "project",
-    "description": "REST API for MyApp",
+    "description": "BEdita4 API project template app",
     "homepage": "https://www.bedita.com",
     "license": "MIT",
     "require": {
