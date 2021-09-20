@@ -29,6 +29,19 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 class Application extends BaseApplication
 {
     /**
+     * Default plugin load options
+     *
+     * @var array
+     */
+    const PLUGIN_DEFAULTS = [
+        'debugOnly' => false,
+        'autoload' => false,
+        'bootstrap' => true,
+        'routes' => true,
+        'ignoreMissing' => true
+    ];
+
+    /**
      * {@inheritDoc}
      */
     public function bootstrap()
@@ -40,18 +53,37 @@ class Application extends BaseApplication
             $this->bootstrapCli();
         }
 
-        /*
-         * Only try to load DebugKit in development mode
-         * Debug Kit should not be installed on a production system
-         */
-        if (Configure::read('debug')) {
-            $this->addPlugin('DebugKit');
-        }
-
-        // Load more plugins here
+        // Load basic plugins here
         $this->addPlugin('BEdita/Core', ['bootstrap' => true]);
         $this->addPlugin('BEdita/API', ['bootstrap' => true, 'routes' => true]);
-        $this->addPlugin('BEdita/DevTools', ['bootstrap' => true]);
+        // Load additional plugins via config
+        $this->addConfigPlugins();
+    }
+
+    /**
+     * Add plugins from 'Plugins' configuration
+     *
+     * @return void
+     */
+    public function addConfigPlugins(): void
+    {
+        $plugins = (array)Configure::read('Plugins');
+        if (empty($plugins)) {
+            return;
+        }
+
+        foreach ($plugins as $plugin => $options) {
+            if (!is_string($plugin) && is_string($options)) {
+                // plugin listed not as assoc array 'PluginName' => [....]
+                // but as numeric array like 0 => 'PluginName'
+                $plugin = $options;
+                $options = [];
+            }
+            $options = array_merge(self::PLUGIN_DEFAULTS, $options);
+            if (!$options['debugOnly'] || ($options['debugOnly'] && Configure::read('debug'))) {
+                $this->addPlugin($plugin, $options);
+            }
+        }
     }
 
     /**
