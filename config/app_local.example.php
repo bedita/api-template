@@ -15,7 +15,7 @@ return [
      * Development Mode:
      * true: Errors and warnings shown.
      */
-    'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
+    'debug' => filter_var(env('DEBUG', false), FILTER_VALIDATE_BOOLEAN),
 
     /*
      * Security and encryption configuration
@@ -60,6 +60,7 @@ return [
      */
     'EmailTransport' => [
         'default' => [
+            'className' => 'Mail',
             'host' => 'localhost',
             'port' => 25,
             'username' => null,
@@ -78,4 +79,29 @@ return [
         'name' => env('BEDITA_PROJECT_TITLE', 'MyApp'),
     ],
 
+    /**
+     * Additional plugins to load with this format:
+     *
+     * [
+     *   'PluginName' => [(options array, see below)],
+     * ]
+     *
+     * or simply using plugin name (default options are applied)
+     *
+     * [
+     *   'PluginName',
+     * ]
+     *
+     * Where options array may contain
+     *
+     * - `debugOnly` - boolean - (default: false) Whether or not you want to load the plugin when in 'debug' mode only
+     * - `bootstrap` - boolean - (default: false) Whether or not you want the $plugin/config/bootstrap.php file loaded.
+     * - `routes` - boolean - (default: false) Whether or not you want to load the $plugin/config/routes.php file.
+     * - `ignoreMissing` - boolean - (default: false) Set to true to ignore missing bootstrap/routes files.
+     * - `autoload` - boolean - (default: false) Whether or not you want an autoloader registered
+     */
+    // 'Plugins' => [
+    //     'BEdita/DevTools' => ['bootstrap' => true, 'routes' => true, 'ignoreMissing' => true],
+    //     'DebugKit' => ['debugOnly' => true, 'bootstrap' => true, 'routes' => true, 'ignoreMissing' => true],
+    // ],
 ];
