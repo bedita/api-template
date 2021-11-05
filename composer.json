@@ -18,7 +18,8 @@
         "cakephp/cakephp-codesniffer": "~3.2.1",
         "psy/psysh": "@stable",
         "bedita/dev-tools": "1.4.*",
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "^6.5",
+        "dereuromark/cakephp-ide-helper": "^0.14.10"
     },
     "autoload": {
         "psr-4": {
