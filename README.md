@@ -46,3 +46,5 @@ Files referencing `MyApp` are:
 * `config/app.php` or override in `config/app_local.php`
 * `Application.php` (and `test/TestCase/ApplicationTest.php`)
 * `webroot/index.php`
+
+Make sure to launch `composer dump-autoload` after this manual change in order to update autoloader data
