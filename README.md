@@ -44,6 +44,8 @@ Files referencing `MyApp` are:
 * `composer.json`
 * `bin/cake.php`
 * `config/app.php` or override in `config/app_local.php`
+* `src/Console/installer.php`
+* `src/Shell/ConsoleShell.php`
 * `Application.php` (and `test/TestCase/ApplicationTest.php`)
 * `webroot/index.php`
 
