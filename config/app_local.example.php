@@ -47,7 +47,23 @@ return [
             'password' => 'secret',
             'database' => 'my_app',
             'log' => true,
+            /*
+             * You can use a DSN string to set the entire configuration
+             */
             'url' => env('DATABASE_URL', null),
+        ],
+
+        /*
+         * The test connection is used during the test suite.
+         */
+        'test' => [
+            'host' => 'localhost',
+            //'port' => 'non_standard_port_number',
+            'username' => 'my_app',
+            'password' => 'secret',
+            'database' => 'test_myapp',
+            //'schema' => 'myapp',
+            'url' => env('DATABASE_TEST_URL', 'sqlite://127.0.0.1/tests.sqlite'),
         ],
     ],
 
@@ -60,7 +76,6 @@ return [
      */
     'EmailTransport' => [
         'default' => [
-            'className' => 'Mail',
             'host' => 'localhost',
             'port' => 25,
             'username' => null,

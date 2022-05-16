@@ -1,10 +1,10 @@
 # BEdita API template
 
-This is the skeleton app to build BEdita4 API projects.
+This is the skeleton app to build BEdita5 API projects.
 
 ## Requirements
 
-1. PHP >= 7.2
+1. PHP 7.4, 8.0 and 8.1
 1. Download latest [Composer](https://getcomposer.org/doc/00-intro.md) or update via `composer self-update`.
 
 ## Installation
