@@ -101,6 +101,32 @@ return [
             'url' => env('CACHE_DEFAULT_URL', null),
         ],
 
+        /**
+         * Configure the cache used for BEdita internal resources caching.
+         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
+         */
+        '_bedita_core_' => [
+            'className' => FileEngine::class,
+            'prefix' => 'bedita_core_',
+            'path' => CACHE . 'object_types/',
+            'serialize' => true,
+            'duration' => '+1 year',
+            'url' => env('CACHE_BEDITACORE_URL', null),
+        ],
+
+        /**
+         * Configure the cache used for object types caching.
+         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
+         */
+        '_bedita_object_types_' => [
+            'className' => FileEngine::class,
+            'prefix' => 'bedita_object_types_',
+            'path' => CACHE . 'object_types/',
+            'serialize' => true,
+            'duration' => '+1 year',
+            'url' => env('CACHE_BEDITAOBJECTTYPES_URL', null),
+        ],
+
         /*
          * Configure the cache used for general framework caching.
          * Translation cache files are stored with this configuration.
