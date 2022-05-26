@@ -2,27 +2,20 @@
 declare(strict_types=1);
 
 /**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * BEdita, API-first content management framework
+ * Copyright 2022 ChannelWeb Srl, Chialab Srl
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
+ * This file is part of BEdita: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
- * @since     3.3.0
- * @license   https://opensource.org/licenses/mit-license.php MIT License
+ * See LICENSE.LGPL or <http://gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 namespace MyApp;
 
-use BEdita\Core\Middleware\BodyParserMiddleware;
+use BEdita\API\App\BaseApplication;
 use Cake\Core\Configure;
-use Cake\Core\ContainerInterface;
-use Cake\Error\Middleware\ErrorHandlerMiddleware;
-use Cake\Http\BaseApplication;
-use Cake\Http\MiddlewareQueue;
-use Cake\Routing\Middleware\RoutingMiddleware;
 
 /**
  * Application setup class.
@@ -33,19 +26,6 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 class Application extends BaseApplication
 {
     /**
-     * Default plugin load options
-     *
-     * @var array
-     */
-    const PLUGIN_DEFAULTS = [
-        'debugOnly' => false,
-        'autoload' => false,
-        'bootstrap' => true,
-        'routes' => true,
-        'ignoreMissing' => true
-    ];
-
-    /**
      * @inheritDoc
      */
     public function bootstrap(): void
@@ -53,99 +33,22 @@ class Application extends BaseApplication
         // Call parent to load bootstrap from files.
         parent::bootstrap();
 
-        if (PHP_SAPI === 'cli') {
-            $this->bootstrapCli();
-        }
-
-        // Load basic plugins here
+        // Load more plugins here
         $this->addPlugin('BEdita/Core', ['bootstrap' => true]);
         $this->addPlugin('BEdita/API', ['bootstrap' => true, 'routes' => true]);
-        // Load additional plugins via config
+
+        // Load other plugins via `Plugin` configuration key
         $this->addConfigPlugins();
     }
 
     /**
-     * Add plugins from 'Plugins' configuration
-     *
-     * @return void
-     */
-    public function addConfigPlugins(): void
-    {
-        $plugins = (array)Configure::read('Plugins');
-        if (empty($plugins)) {
-            return;
-        }
-
-        foreach ($plugins as $plugin => $options) {
-            if (!is_string($plugin) && is_string($options)) {
-                // plugin listed not as assoc array 'PluginName' => [....]
-                // but as numeric array like 0 => 'PluginName'
-                $plugin = $options;
-                $options = [];
-            }
-            $options = array_merge(self::PLUGIN_DEFAULTS, $options);
-            if (!$options['debugOnly'] || ($options['debugOnly'] && Configure::read('debug'))) {
-                $this->addPlugin($plugin, $options);
-            }
-        }
-    }
-
-    /**
-     * Setup the middleware queue your application will use.
-     *
-     * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to setup.
-     * @return \Cake\Http\MiddlewareQueue The updated middleware queue.
-     */
-    public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
-    {
-        $middlewareQueue
-            // Catch any exceptions in the lower layers,
-            // and make an error page/response
-            ->add(new ErrorHandlerMiddleware(Configure::read('Error')))
-
-            // Add routing middleware.
-            // If you have a large number of routes connected, turning on routes
-            // caching in production could improve performance. For that when
-            // creating the middleware instance specify the cache config name by
-            // using it's second constructor argument:
-            // `new RoutingMiddleware($this, '_cake_routes_')`
-            ->add(new RoutingMiddleware($this))
-
-            // Parse various types of encoded request bodies so that they are
-            // available as array through $request->getData()
-            // https://book.cakephp.org/4/en/controllers/middleware.html#body-parser-middleware
-            ->add(new BodyParserMiddleware());
-
-        return $middlewareQueue;
-    }
-
-    /**
-     * Register application container services.
-     *
-     * @param \Cake\Core\ContainerInterface $container The Container to update.
-     * @return void
-     * @link https://book.cakephp.org/4/en/development/dependency-injection.html#dependency-injection
-     */
-    public function services(ContainerInterface $container): void
-    {
-    }
-
-    /**
-     * Bootstrapping for CLI application.
-     *
-     * That is when running commands.
-     *
-     * @return void
+     * @inheritDoc
      */
     protected function bootstrapCli(): void
     {
-        $this->addOptionalPlugin('Cake/Repl');
-        $this->addOptionalPlugin('Bake');
-        $this->addOptionalPlugin('IdeHelper');
-
-
-        $this->addPlugin('Migrations');
-
-        // Load more plugins here
+        parent::bootstrapCli();
+        if (Configure::read('debug')) {
+            $this->addOptionalPlugin('Cake/Repl');
+        }
     }
 }

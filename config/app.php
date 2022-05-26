@@ -1,11 +1,13 @@
 <?php
 
+use BEdita\API\Error\ExceptionRenderer;
 use Cake\Cache\Engine\FileEngine;
-use Cake\Error\ExceptionRenderer;
+use Cake\Database\Connection;
+use Cake\Database\Driver\Mysql;
 use Cake\Log\Engine\FileLog;
 
 return [
-    /*
+    /**
      * Debug Level:
      *
      * Production Mode:
@@ -14,9 +16,9 @@ return [
      * Development Mode:
      * true: Errors and warnings shown.
      */
-    'debug' => filter_var(env('DEBUG', false), FILTER_VALIDATE_BOOLEAN),
+    'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
 
-    /*
+    /**
      * Configure basic information about the application.
      *
      * - namespace - The namespace to find app classes under.
@@ -33,10 +35,7 @@ return [
      *      /.htaccess
      *      /webroot/.htaccess
      *   And uncomment the baseUrl key below.
-     * - fullBaseUrl - A base URL to use for absolute links. When set to false (default)
-     *   CakePHP generates required value based on `HTTP_HOST` environment variable.
-     *   However, you can define it manually to optimize performance or if you
-     *   are concerned about people manipulating the `Host` header.
+     * - fullBaseUrl - A base URL to use for absolute links.
      * - imageBaseUrl - Web path to the public images directory under webroot.
      * - cssBaseUrl - Web path to the public css directory under webroot.
      * - jsBaseUrl - Web path to the public js directory under webroot.
@@ -48,12 +47,11 @@ return [
         'namespace' => 'MyApp',
         'encoding' => env('APP_ENCODING', 'UTF-8'),
         'defaultLocale' => env('APP_DEFAULT_LOCALE', 'en_US'),
-        'defaultTimezone' => env('APP_DEFAULT_TIMEZONE', 'UTC'),
-        'base' => false,
+        'base' => env('BEDITA_BASE_URL', false),
         'dir' => 'src',
         'webroot' => 'webroot',
         'wwwRoot' => WWW_ROOT,
-        //'baseUrl' => env('SCRIPT_NAME'),
+        // 'baseUrl' => env('SCRIPT_NAME'),
         'fullBaseUrl' => false,
         'imageBaseUrl' => 'img/',
         'cssBaseUrl' => 'css/',
@@ -65,20 +63,28 @@ return [
         ],
     ],
 
-    /*
+    /**
      * Security and encryption configuration
      *
      * - salt - A random string used in security hashing methods.
      *   The salt value is also used as the encryption key.
      *   You should treat it as extremely sensitive data.
+     * - jwt - Duration and algorithm for JSON Web Tokens.
+     *   By default, `duration` is `'+20 minutes'`, and `algorithm` is `'HS256'`.
+     * - blockAnonymousApps - Are anonymous applications (i.e. requests without an api key) forbidden?
+     * - blockAnonymousUsers - Are unauthenticated users requests blocked by default?
      */
     'Security' => [
         'salt' => env('SECURITY_SALT'),
+        // 'jwt' => [
+        //     'duration' => '+20 minutes',
+        //     'algorithm' => 'HS256',
+        // ],
         'blockAnonymousApps' => true,
         'blockAnonymousUsers' => false,
     ],
 
-    /*
+    /**
      * Apply timestamps with the last modified time to static assets (js, css, images).
      * Will append a querystring parameter containing the time the file was modified.
      * This is useful for busting browser caches.
@@ -87,11 +93,10 @@ return [
      * enable timestamping regardless of debug value.
      */
     'Asset' => [
-        //'timestamp' => true,
-        // 'cacheTime' => '+1 year'
+        // 'timestamp' => true,
     ],
 
-    /*
+    /**
      * Configure the cache adapters.
      */
     'Cache' => [
@@ -101,6 +106,50 @@ return [
             'url' => env('CACHE_DEFAULT_URL', null),
         ],
 
+        /*
+         * Configure the cache used for general framework caching.
+         * Translation cache files are stored with this configuration.
+         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
+         * If you set 'className' => 'Null' core cache will be disabled.
+         */
+        '_cake_core_' => [
+            'className' => FileEngine::class,
+            'prefix' => 'myapp_cake_core_',
+            'path' => CACHE . 'persistent' . DS,
+            'serialize' => true,
+            'duration' => '+1 years',
+            'url' => env('CACHE_CAKECORE_URL', null),
+        ],
+
+        /*
+         * Configure the cache for model and datasource caches. This cache
+         * configuration is used to store schema descriptions, and table listings
+         * in connections.
+         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
+         */
+        '_cake_model_' => [
+            'className' => FileEngine::class,
+            'prefix' => 'myapp_cake_model_',
+            'path' => CACHE . 'models' . DS,
+            'serialize' => true,
+            'duration' => '+1 years',
+            'url' => env('CACHE_CAKEMODEL_URL', null),
+        ],
+
+        /*
+         * Configure the cache for routes. The cached routes collection is built the
+         * first time the routes are processed through `config/routes.php`.
+         * Duration will be set to '+2 seconds' in bootstrap.php when debug = true
+         */
+        '_cake_routes_' => [
+            'className' => FileEngine::class,
+            'prefix' => 'myapp_cake_routes_',
+            'path' => CACHE,
+            'serialize' => true,
+            'duration' => '+1 years',
+            'url' => env('CACHE_CAKEROUTES_URL', null),
+        ],
+
         /**
          * Configure the cache used for BEdita internal resources caching.
          * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
@@ -108,7 +157,7 @@ return [
         '_bedita_core_' => [
             'className' => FileEngine::class,
             'prefix' => 'bedita_core_',
-            'path' => CACHE . 'object_types/',
+            'path' => CACHE . 'bedita_core/',
             'serialize' => true,
             'duration' => '+1 year',
             'url' => env('CACHE_BEDITACORE_URL', null),
@@ -126,53 +175,9 @@ return [
             'duration' => '+1 year',
             'url' => env('CACHE_BEDITAOBJECTTYPES_URL', null),
         ],
-
-        /*
-         * Configure the cache used for general framework caching.
-         * Translation cache files are stored with this configuration.
-         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
-         * If you set 'className' => 'Null' core cache will be disabled.
-         */
-        '_cake_core_' => [
-            'className' => FileEngine::class,
-            'prefix' => 'cake_core_',
-            'path' => CACHE . 'persistent' . DS,
-            'serialize' => true,
-            'duration' => '+1 years',
-            'url' => env('CACHE_CAKECORE_URL', null),
-        ],
-
-        /*
-         * Configure the cache for model and datasource caches. This cache
-         * configuration is used to store schema descriptions, and table listings
-         * in connections.
-         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
-         */
-        '_cake_model_' => [
-            'className' => FileEngine::class,
-            'prefix' => 'cake_model_',
-            'path' => CACHE . 'models' . DS,
-            'serialize' => true,
-            'duration' => '+1 years',
-            'url' => env('CACHE_CAKEMODEL_URL', null),
-        ],
-
-        /*
-         * Configure the cache for routes. The cached routes collection is built the
-         * first time the routes are processed through `config/routes.php`.
-         * Duration will be set to '+2 seconds' in bootstrap.php when debug = true
-         */
-        '_cake_routes_' => [
-            'className' => FileEngine::class,
-            'prefix' => 'cake_routes_',
-            'path' => CACHE,
-            'serialize' => true,
-            'duration' => '+1 years',
-            'url' => env('CACHE_CAKEROUTES_URL', null),
-        ],
     ],
 
-    /*
+    /**
      * Configure the Error and Exception handlers used by your application.
      *
      * By default errors are displayed using Debugger, when debug is true and logged
@@ -229,7 +234,7 @@ return [
         'editor' => 'vscode',
     ],
 
-    /*
+    /**
      * Email configuration.
      *
      * By defining transports separately from delivery profiles you can easily
@@ -254,7 +259,7 @@ return [
         ],
     ],
 
-    /*
+    /**
      * Email delivery profiles
      *
      * Delivery profiles allow you to predefine various properties about email
@@ -267,15 +272,12 @@ return [
         'default' => [
             'transport' => 'default',
             'from' => 'you@localhost',
-            /*
-             * Will by default be set to config value of App.encoding, if that exists otherwise to UTF-8.
-             */
             //'charset' => 'utf-8',
             //'headerCharset' => 'utf-8',
         ],
     ],
 
-    /*
+    /**
      * Connection information used by the ORM to connect
      * to your application's datastores.
      *
@@ -289,19 +291,65 @@ return [
      *   other RDBMS.
      */
     'Datasources' => [
+        /*
+         * These configurations should contain permanent settings used
+         * by all environments.
+         *
+         * The values in app_local.php will override any values set here
+         * and should be used for local and per-environment configurations.
+         *
+         * Environment variable based configurations can be loaded here or
+         * in app_local.php depending on the applications needs.
+         */
         'default' => [
+            'className' => Connection::class,
+            'driver' => Mysql::class,
+            'persistent' => false,
+            'timezone' => env('BEDITA_DEFAULT_TIMEZONE', 'UTC'),
+            /*
+             * For MariaDB/MySQL the internal default changed from utf8 to utf8mb4, aka full utf-8 support, in CakePHP 3.6
+             */
+            //'encoding' => 'utf8mb4',
+
+            /*
+             * If your MySQL server is configured with `skip-character-set-client-handshake`
+             * then you MUST use the `flags` config to set your charset encoding.
+             * For e.g. `'flags' => [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4']`
+             */
+            'flags' => [],
+            'cacheMetadata' => true,
+            'log' => false,
+
+            /**
+             * Set identifier quoting to true if you are using reserved words or
+             * special characters in your table or column names. Enabling this
+             * setting will result in queries built using the Query Builder having
+             * identifiers quoted when creating SQL. It should be noted that this
+             * decreases performance because each query needs to be traversed and
+             * manipulated before being executed.
+             */
+            'quoteIdentifiers' => false,
+
+            /**
+             * During development, if using MySQL < 5.6, uncommenting the
+             * following line could boost the speed at which schema metadata is
+             * fetched from the database. It can also be set directly with the
+             * mysql configuration directive 'innodb_stats_on_metadata = 0'
+             * which is the recommended value in production environments
+             */
+            //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
             'url' => env('DATABASE_URL', null),
         ],
 
-        /*
+        /**
          * The test connection is used during the test suite.
          */
         'test' => [
-            'url' => env('DATABASE_TEST_URL', null),
+            'url' => env('DATABASE_TEST_URL', 'sqlite:///tmp/bedita5_test.sqlite'),
         ],
     ],
 
-    /*
+    /**
      * Configures logging options
      */
     'Log' => [
@@ -331,7 +379,7 @@ return [
         ],
     ],
 
-    /*
+    /**
      * Session configuration.
      *
      * Contains an array of settings to use for session configuration. The
@@ -340,8 +388,8 @@ return [
      *
      * ## Options
      *
-     * - `cookie` - The name of the cookie to use. Defaults to value set for `session.name` php.ini config.
-     *    Avoid using `.` in cookie names, as PHP will drop sessions from cookies with `.` in the name.
+     * - `cookie` - The name of the cookie to use. Defaults to 'CAKEPHP'. Avoid using `.` in cookie names,
+     *   as PHP will drop sessions from cookies with `.` in the name.
      * - `cookiePath` - The url path for which session cookie is set. Maps to the
      *   `session.cookie_path` php.ini config. Defaults to base path of app.
      * - `timeout` - The time in minutes the session should be valid for.
@@ -368,72 +416,10 @@ return [
      * Make sure the class implements PHP's `SessionHandlerInterface` and set
      * Session.handler to <name>
      *
-     * To use database sessions, load the SQL file located at config/schema/sessions.sql
+     * To use database sessions, load the SQL file located at config/Schema/sessions.sql
      */
     'Session' => [
         'defaults' => 'php',
-    ],
-
-    /**
-     * Project information.
-     *
-     * - `name` public name of the project, short expression recommended like `MyProject`, `Nope v1`
-     */
-    // 'Project' => [
-    //     'name' => env('BEDITA_PROJECT_TITLE', 'MyApp'),
-    // ],
-
-    /**
-     * Signup settings.
-     *
-     * - `requireActivation` - boolean (default: true) - Are new users required to verify their contact method
-     *      before being "activated"? If true upon creation user will have a `draft` status, otherwise `on`
-     * - 'roles' - allowed role names on user signup (this config should be set normally at application level),
-     *      requested user roles MUST be included in this array
-     * - 'requireEmail' - require email upon signup (default: true)
-     * - 'activationUrl' => default activation URL to use if not set by application
-     * - 'requirePassword' - require password upon signup (default: true), can be false in some AUTH schemas like One Time Password
-     * - 'defaultRoles' - roles to add upon signup as default if no roles are passed; they MUST be in allowed `roles` in order to be set
-     * - 'emailSubject' - email subject texts on 'signup' and 'welcome' (activation success) actions
-     */
-    'Signup' => [
-        // 'requireActivation' => true,
-        // 'requireEmail' => false,
-        // 'requirePassword' => false,
-        // 'activationUrl' => 'https://myapp.com/verify',
-
-        // 'emailSubject' => [
-        //     'signup' => 'Signup subject',
-        //     'welcome' => 'Welcome subject',
-        // ],
-
-        // Doorway roles
-        // 'defaultRoles' => ['investor', 'company'],
-        // 'roles' => ['investor', 'company'],
-
-        // Rejoint roles
-        // 'defaultRoles' => [],
-        // 'roles' => ['surgeon', 'patient', 'assistant', 'specialist'],
-        // 'activationUrl' => 'http://rejoint-app.localhost/signup/verify',
-        // 'requireActivation' => true,
-        // 'requireEmail' => true,
-        // 'requirePassword' => true,
-
-    ],
-
-    /**
-     * Auth default settings.
-     *
-     * - 'passwordPolicy.rule' - Regexp, callback or validation class to use as validation rule (only regexp supported for now)
-     * - 'passwordPolicy.message' -  Error message for password validation failure
-     */
-    'Auth' => [
-        'passwordPolicy' => [
-            'rule' => '',
-            'message' => '',
-            // 'rule' => "/^(?=\D*\d).{6,}$/",
-            // 'message' => 'Password must contain at least 6 valid alphanumeric characters and at least 1 digit',
-        ]
     ],
 
     /**
@@ -445,13 +431,12 @@ return [
     'Filesystem' => [
         'default' => [
             'className' => 'BEdita/Core.Local',
-            'path' => env('BEDITA_FILES_PATH', WWW_ROOT . '_files'),
-            'baseUrl' => env('BEDITA_FILES_BASE_URL'),
+            'path' => WWW_ROOT . '_files',
+            'url' => env('FILESYSTEM_DEFAULT_URL', null),
         ],
         'thumbnails' => [
             'className' => 'BEdita/Core.Local',
-            'path' => env('BEDITA_THUMBS_PATH', WWW_ROOT . '_files' . DS . 'thumbs'),
-            'baseUrl' => env('BEDITA_THUMBS_BASE_URL'),
+            'path' => WWW_ROOT . '_files' . DS . 'thumbs',
             'url' => env('FILESYSTEM_THUMBNAILS_URL', null),
         ],
     ],
@@ -470,7 +455,7 @@ return [
      *      an external generator that invokes a remote API, ...
      */
     'Thumbnails' => [
-        'allowAny' => true,
+        'allowAny' => filter_var(env('THUMBNAILS_ALLOW_ANY', false), FILTER_VALIDATE_BOOLEAN),
         'presets' => [
             'default' => [
                 // 'generator' => 'async',
@@ -489,50 +474,6 @@ return [
                 // 'baseGenerator' => 'default',
                 'url' => env('THUMBNAILS_ASYNC_URL', null),
             ],
-        ],
-    ],
-
-    /**
-     * I18n settings.
-     * Language tags follow IETF RFC5646 https://tools.ietf.org/html/rfc5646
-     * See also https://en.wikipedia.org/wiki/IETF_language_tag
-     *
-     * - 'languages' - array of language tags as keys with names as values; if empty any language tag may be used,
-     *      if not only these language tags are valid
-     * - 'default' - value assumed on empty lang attribute upon creation, can be null (default)
-     */
-    // 'I18n' => [
-    //     // list of allowed project language tags
-    //     'languages' => [
-    //       'en' => 'English',
-    //       'it' => 'Italiano',
-    //     ],
-    //     // default lang tag - may be null
-    //     'default' => 'en',
-    // ],
-
-    /**
-     * Uncomment to define custom actions to load
-     * This way some action beahavior can be overridden
-     */
-    // 'Actions' => [
-    //    'SignupUserAction' => 'Rejoint\Model\Action\SignupUserAction',
-    // //     'SignupUserActivationAction' => '\MyPlugin\Model\Action\SignupUserActivationAction',
-    // ],
-
-    /**
-     * Default values per object type
-     * object type names as keys (lower case), default property names and values as value
-     */
-    'DefaultValues' => [
-        'images' => [
-            'status' => 'on',
-        ],
-        'files' => [
-            'status' => 'on',
-        ],
-        'videos' => [
-            'status' => 'on',
         ],
     ],
 ];
