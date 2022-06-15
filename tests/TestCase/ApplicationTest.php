@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace MyApp\Test\TestCase;
 
-use BEdita\Core\Middleware\BodyParserMiddleware;
+use BEdita\API\Middleware\BodyParserMiddleware;
 use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\MiddlewareQueue;
@@ -69,9 +69,9 @@ class ApplicationTest extends TestCase
         $app->bootstrap();
         $plugins = $app->getPlugins();
 
-        static::assertTrue($plugins()->has('BEdita/Core'));
-        static::assertTrue($plugins()->has('BEdita/API'));
-        static::assertTrue($plugins()->has('Migrations'));
+        static::assertTrue($plugins->has('BEdita/Core'));
+        static::assertTrue($plugins->has('BEdita/API'));
+        static::assertTrue($plugins->has('Migrations'));
         $this->assertTrue($plugins->has('Bake'), 'plugins has Bake?');
         $this->assertFalse($plugins->has('DebugKit'), 'plugins has DebugKit?');
         $this->assertTrue($plugins->has('Migrations'), 'plugins has Migrations?');
@@ -81,10 +81,13 @@ class ApplicationTest extends TestCase
      * Test bootstrap add DebugKit plugin in debug mode.
      *
      * @return void
+     * @return void
+     * @covers ::bootstrap()
      */
     public function testBootstrapInDebug()
     {
         Configure::write('debug', true);
+        Configure::write('Plugins', ['DebugKit']);
         $app = new Application(dirname(dirname(__DIR__)) . '/config');
         $app->bootstrap();
         $plugins = $app->getPlugins();
@@ -96,6 +99,8 @@ class ApplicationTest extends TestCase
      * testBootstrapPluginWitoutHalt
      *
      * @return void
+     * @return void
+     * @covers ::bootstrap()
      */
     public function testBootstrapPluginWithoutHalt()
     {
@@ -103,7 +108,7 @@ class ApplicationTest extends TestCase
 
         $app = $this->getMockBuilder(Application::class)
             ->setConstructorArgs([dirname(dirname(__DIR__)) . '/config'])
-            ->onlyMethods(['addPlugin'])
+            ->setMethods(['addPlugin'])
             ->getMock();
 
         $app->method('addPlugin')
