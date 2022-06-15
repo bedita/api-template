@@ -9,6 +9,7 @@
         "bedita/core": "dev-5-salix",
         "bedita/api": "dev-5-salix",
         "bedita/aws": "dev-feat/cake4-bedita5",
+        "cakephp/plugin-installer": "^1.3.1",
         "cakephp/cakephp": "~4.3.9"
     },
     "require-dev": {
@@ -17,7 +18,7 @@
         "cakephp/cakephp-codesniffer": "~4.5.1",
         "cakephp/repl": "^0.1",
         "bedita/dev-tools": "^2.1",
-        "phpunit/phpunit": "^8.5",
+        "phpunit/phpunit": "^9.5",
         "dereuromark/cakephp-ide-helper": "^1.14"
     },
     "autoload": {
@@ -46,7 +47,8 @@
     },
     "config": {
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "cakephp/plugin-installer": true
         }
     }
 }
