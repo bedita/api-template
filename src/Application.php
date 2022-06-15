@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace MyApp;
 
-use BEdita\Core\Middleware\BodyParserMiddleware;
+use BEdita\API\Middleware\BodyParserMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
