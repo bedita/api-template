@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,6 +20,7 @@ if (!defined('STDIN')) {
     define('STDIN', fopen('php://stdin', 'r'));
 }
 
+use Cake\Codeception\Console\Installer as CodeceptionInstaller;
 use Cake\Utility\Security;
 use Composer\Script\Event;
 use Exception;
@@ -28,11 +31,10 @@ use Exception;
  */
 class Installer
 {
-
     /**
      * An array of directories to be made writable
      */
-    const WRITABLE_DIRS = [
+    public const WRITABLE_DIRS = [
         'logs',
         'tmp',
         'tmp/cache',
@@ -59,33 +61,11 @@ class Installer
         static::createAppLocalConfig($rootDir, $io);
         static::createWritableDirectories($rootDir, $io);
 
-        // ask if the permissions should be changed
-        if ($io->isInteractive()) {
-            $validator = function ($arg) {
-                if (in_array($arg, ['Y', 'y', 'N', 'n'])) {
-                    return $arg;
-                }
-                throw new Exception('This is not a valid answer. Please choose Y or n.');
-            };
-            $setFolderPermissions = $io->askAndValidate(
-                '<info>Set Folder Permissions ? (Default to Y)</info> [<comment>Y,n</comment>]? ',
-                $validator,
-                10,
-                'Y'
-            );
-
-            if (in_array($setFolderPermissions, ['Y', 'y'])) {
-                static::setFolderPermissions($rootDir, $io);
-            }
-        } else {
-            static::setFolderPermissions($rootDir, $io);
-        }
-
+        static::setFolderPermissions($rootDir, $io);
         static::setSecuritySalt($rootDir, $io);
 
-        $class = 'Cake\Codeception\Console\Installer';
-        if (class_exists($class)) {
-            $class::customizeCodeceptionBinary($event);
+        if (class_exists(CodeceptionInstaller::class)) {
+            CodeceptionInstaller::customizeCodeceptionBinary($event);
         }
     }
 
@@ -135,6 +115,26 @@ class Installer
      */
     public static function setFolderPermissions($dir, $io)
     {
+        // ask if the permissions should be changed
+        if ($io->isInteractive()) {
+            $validator = function ($arg) {
+                if (in_array($arg, ['Y', 'y', 'N', 'n'])) {
+                    return $arg;
+                }
+                throw new Exception('This is not a valid answer. Please choose Y or n.');
+            };
+            $setFolderPermissions = $io->askAndValidate(
+                '<info>Set Folder Permissions ? (Default to Y)</info> [<comment>Y,n</comment>]? ',
+                $validator,
+                10,
+                'Y'
+            );
+
+            if (in_array($setFolderPermissions, ['n', 'N'])) {
+                return;
+            }
+        }
+
         // Change the permissions on a path and output the results.
         $changePerms = function ($path) use ($io) {
             $currentPerms = fileperms($path) & 0777;
