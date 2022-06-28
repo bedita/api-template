@@ -1,42 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-    colors="true"
-    processIsolation="false"
-    stopOnFailure="false"
-    bootstrap="./tests/bootstrap.php"
-    forceCoversAnnotation="true"
-    >
-    <php>
-        <ini name="memory_limit" value="-1"/>
-        <ini name="apc.enable_cli" value="1"/>
-        <const name="UNIT_TEST_RUN" value="1"/>
-    </php>
-
-    <!-- Add any additional test suites you want to run here -->
-    <testsuites>
-        <testsuite name="BEdita 5 App Test Suite">
-            <directory>./tests/TestCase</directory>
-        </testsuite>
-    </testsuites>
-
-    <!-- Setup a listener for fixtures -->
-    <listeners>
-        <listener
-        class="\Cake\TestSuite\Fixture\FixtureInjector"
-        file="./vendor/cakephp/cakephp/src/TestSuite/Fixture/FixtureInjector.php">
-            <arguments>
-                <object class="\Cake\TestSuite\Fixture\FixtureManager" />
-            </arguments>
-        </listener>
-    </listeners>
-
-    <!-- Ignore vendor tests in code coverage reports -->
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src/</directory>
-            <exclude>
-                <file>src/Console/Installer.php</file>
-            </exclude>
-        </whitelist>
-    </filter>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" processIsolation="false" stopOnFailure="false" bootstrap="./tests/bootstrap.php" forceCoversAnnotation="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./src/</directory>
+    </include>
+    <exclude>
+      <file>src/Console/Installer.php</file>
+    </exclude>
+  </coverage>
+  <php>
+    <ini name="memory_limit" value="-1"/>
+    <ini name="apc.enable_cli" value="1"/>
+  </php>
+  <!-- Add any additional test suites you want to run here -->
+  <testsuites>
+    <testsuite name="app">
+      <directory>tests/TestCase/</directory>
+    </testsuite>
+    <!-- Add plugin test suites here. -->
+  </testsuites>
+  <!-- Setup a listener for fixtures -->
+  <listeners>
+    <listener class="\Cake\TestSuite\Fixture\FixtureInjector" file="./vendor/cakephp/cakephp/src/TestSuite/Fixture/FixtureInjector.php">
+      <arguments>
+        <object class="\Cake\TestSuite\Fixture\FixtureManager"/>
+      </arguments>
+    </listener>
+  </listeners>
 </phpunit>
