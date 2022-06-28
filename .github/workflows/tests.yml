@@ -84,6 +84,9 @@ jobs:
       - name: 'Install dependencies with Composer'
         run: 'composer install --prefer-dist --no-interaction'
 
+      - name: '(Repeat) Install dependencies with Composer'
+        run: 'composer install --prefer-dist --no-interaction'
+
       - name: 'Run PHP STAN'
         run: 'vendor/bin/phpstan analyse --no-progress --error-format=github'
 
@@ -130,6 +133,9 @@ jobs:
             composer-
 
       - name: 'Install dependencies with Composer'
+        run: 'composer install --prefer-dist --no-interaction'
+
+      - name: '(Repeat) Install dependencies with Composer'
         run: 'composer install --prefer-dist --no-interaction'
 
       - name: 'Run PHPUnit with coverage'
