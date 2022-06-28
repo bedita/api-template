@@ -9,14 +9,14 @@
     <php>
         <ini name="memory_limit" value="-1"/>
         <ini name="apc.enable_cli" value="1"/>
-        <const name="UNIT_TEST_RUN" value="1"/>
     </php>
 
     <!-- Add any additional test suites you want to run here -->
     <testsuites>
-        <testsuite name="BEdita 5 App Test Suite">
-            <directory>./tests/TestCase</directory>
+        <testsuite name="app">
+            <directory>tests/TestCase/</directory>
         </testsuite>
+        <!-- Add plugin test suites here. -->
     </testsuites>
 
     <!-- Setup a listener for fixtures -->
