@@ -10,7 +10,7 @@
         "bedita/api": "dev-5-salix",
         "bedita/aws": "dev-feat/cake4-bedita5",
         "cakephp/plugin-installer": "^1.3.1",
-        "cakephp/cakephp": "~4.4.1"
+        "cakephp/cakephp": "^4.4.1"
     },
     "require-dev": {
         "cakephp/bake": "^2.7",
@@ -19,6 +19,7 @@
         "cakephp/repl": "^0.1",
         "phpunit/phpunit": "^9.5",
         "bedita/dev-tools": "^2.1",
+        "josegonzalez/dotenv": "^3.2",
         "phpstan/phpstan": "^1.7.1",
         "dereuromark/cakephp-ide-helper": "^1.14"
     },
@@ -29,8 +30,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "MyApp\\Test\\": "tests",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+            "MyApp\\Test\\": "tests/",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests/"
         }
     },
     "scripts": {
@@ -47,6 +48,7 @@
         "test": "vendor/bin/phpunit --colors=always"
     },
     "config": {
+        "sort-packages": true,
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "cakephp/plugin-installer": true
