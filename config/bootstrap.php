@@ -31,14 +31,12 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'paths.php';
  */
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
 
-use BEdita\Core\Filesystem\FilesystemRegistry;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Datasource\ConnectionManager;
-use Cake\Error\ConsoleErrorHandler;
-use Cake\Error\ErrorHandler;
-use Cake\Http\ServerRequest;
+use Cake\Error\ErrorTrap;
+use Cake\Error\ExceptionTrap;
 use Cake\Log\Log;
 use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
@@ -124,17 +122,13 @@ ini_set('intl.default_locale', Configure::read('App.defaultLocale'));
 /*
  * Register application error and exception handlers.
  */
-$isCli = PHP_SAPI === 'cli';
-if ($isCli) {
-    (new ConsoleErrorHandler(Configure::read('Error')))->register();
-} else {
-    (new ErrorHandler(Configure::read('Error')))->register();
-}
+(new ErrorTrap(Configure::read('Error')))->register();
+(new ExceptionTrap(Configure::read('Error')))->register();
 
 /*
  * Include the CLI bootstrap overrides.
  */
-if ($isCli) {
+if (PHP_SAPI === 'cli') {
     require CONFIG . 'bootstrap_cli.php';
 }
 
@@ -170,26 +164,9 @@ if ($fullBaseUrl) {
 }
 unset($fullBaseUrl);
 
-Cache::setConfig(Configure::consume('Cache'));
-ConnectionManager::setConfig(Configure::consume('Datasources'));
-TransportFactory::setConfig(Configure::consume('EmailTransport'));
-Mailer::setConfig(Configure::consume('Email'));
-Log::setConfig(Configure::consume('Log'));
-Security::setSalt(Configure::consume('Security.salt'));
-FilesystemRegistry::setConfig(Configure::consume('Filesystem'));
-
-/*
- * Setup detectors for mobile and tablet.
- * If you don't use these checks you can safely remove this code
- * and the mobiledetect package from composer.json.
- */
-ServerRequest::addDetector('mobile', function ($request) {
-    $detector = new \Detection\MobileDetect();
-
-    return $detector->isMobile();
-});
-ServerRequest::addDetector('tablet', function ($request) {
-    $detector = new \Detection\MobileDetect();
-
-    return $detector->isTablet();
-});
+Cache::setConfig(Configure::consume('Cache') ?: []);
+ConnectionManager::setConfig(Configure::consume('Datasources') ?: []);
+TransportFactory::setConfig(Configure::consume('EmailTransport') ?: []);
+Mailer::setConfig(Configure::consume('Email') ?: []);
+Log::setConfig(Configure::consume('Log') ?: []);
+Security::setSalt((string)Configure::consume('Security.salt'));
