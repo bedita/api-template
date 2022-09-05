@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,9 +17,6 @@
 namespace MyApp\Test\TestCase;
 
 use Cake\Core\Configure;
-use Cake\Error\Middleware\ErrorHandlerMiddleware;
-use Cake\Http\MiddlewareQueue;
-use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\TestSuite\TestCase;
 use MyApp\Application;
 
@@ -29,105 +28,34 @@ use MyApp\Application;
 class ApplicationTest extends TestCase
 {
     /**
-     * Test `middleware` method
-     *
-     * @return void
-     *
-     * @covers ::middleware
-     */
-    public function testMiddleware(): void
-    {
-        $app = new Application(CONFIG);
-        $middleware = new MiddlewareQueue();
-        $middleware = $app->middleware($middleware);
-
-        static::assertInstanceOf(ErrorHandlerMiddleware::class, $middleware->get(0));
-        static::assertInstanceOf(RoutingMiddleware::class, $middleware->get(1));
-    }
-
-    /**
      * Test `bootstrap` method
      *
      * @return void
-     *
      * @covers ::bootstrap()
-     * @covers ::bootstrapCli()
      */
     public function testBootstrap()
     {
         Configure::write('Plugins', []);
         $app = new Application(CONFIG);
         $app->bootstrap();
-
         static::assertTrue($app->getPlugins()->has('BEdita/Core'));
         static::assertTrue($app->getPlugins()->has('BEdita/API'));
         static::assertTrue($app->getPlugins()->has('Migrations'));
     }
 
     /**
-     * `testConfigPlugins` data provider
-     *
-     * @return array
-     */
-    public function configPluginsProvider(): array
-    {
-        return [
-            'simple' => [
-                true,
-                [
-                    'Bake',
-                ],
-            ],
-            'empty' => [
-                false,
-                [],
-            ],
-            'options' => [
-                true,
-                [
-                    'Bake' => ['bootstrap' => true, 'ignoreMissing' => true],
-                ],
-            ],
-            'debug no' => [
-                false,
-                [
-                    'Bake' => ['debugOnly' => true],
-                ],
-                false,
-            ],
-            'debug yes' => [
-                true,
-                [
-                    'Bake' => ['debugOnly' => true],
-                ],
-                true,
-            ]
-
-        ];
-    }
-
-    /**
-     * Test `addConfigPlugins` method using `Bake` Plugin
+     * Test `bootstrapCli` method
      *
      * @return void
-     *
-     * @covers ::addConfigPlugins()
-     * @dataProvider configPluginsProvider
+     * @covers ::bootstrapCli()
      */
-    public function testConfigPlugins(bool $expected, array $config, bool $debug = false)
+    public function testBootstrapCli()
     {
         $currDebug = Configure::read('debug');
-
-        Configure::write('Plugins', $config);
-        Configure::write('debug', $debug);
-
+        Configure::write('debug', true);
         $app = new Application(CONFIG);
-        $app->getPlugins()->remove('Bake');
-
-        $app->addConfigPlugins();
-
-        static::assertEquals($expected, $app->getPlugins()->has('Bake'));
-
+        $app->bootstrap();
+        static::assertTrue($app->getPlugins()->has('Cake/Repl'));
         Configure::write('debug', $currDebug);
     }
 }

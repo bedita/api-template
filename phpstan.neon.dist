@@ -1,0 +1,9 @@
+parameters:
+  bootstrapFiles:
+    - tests/bootstrap.php
+  paths:
+    - src
+    - tests
+  excludePaths:
+    - src/Console/Installer.php
+  level: 1
