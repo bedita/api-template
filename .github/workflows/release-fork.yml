@@ -6,8 +6,9 @@ on:
 
 jobs:
   call:
-    if: ${{ github.repository_owner == 'bedita' }}
+    if: ${{ github.repository_owner != 'bedita' }}
     uses: bedita/github-workflows/.github/workflows/release.yml@feat/token
     with:
       main_branch: 'master'
       dist_branches: '["master"]'
+      token: ${{ secrets.GITHUB_TOKEN }}
