@@ -5,7 +5,7 @@ on:
     types: [closed]
 
 jobs:
-  call:
+  release:
     uses: bedita/github-workflows/.github/workflows/release.yml@feat/token
     with:
       main_branch: 'master'
