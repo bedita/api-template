@@ -1,4 +1,4 @@
-name: Release
+name: Release from fork
 
 on:
   pull_request:
@@ -11,4 +11,4 @@ jobs:
     with:
       main_branch: 'master'
       dist_branches: '["master"]'
-      token: ${{ secrets.GITHUB_TOKEN }}
+      token: ${{ secrets.GH_RELEASE_TOKEN }}
