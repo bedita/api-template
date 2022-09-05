@@ -10,3 +10,5 @@ jobs:
     with:
       main_branch: 'master'
       dist_branches: '["master"]'
+    secrets:
+      GH_RELEASE_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
