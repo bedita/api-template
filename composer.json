@@ -19,7 +19,7 @@
         "cakephp/cakephp-codesniffer": "~4.5.1",
         "cakephp/repl": "^0.1",
         "phpunit/phpunit": "^9.5",
-        "bedita/dev-tools": "^2.1",
+        "bedita/dev-tools": "^2.1.3",
         "josegonzalez/dotenv": "^3.2",
         "phpstan/phpstan": "^1.7.1",
         "dereuromark/cakephp-ide-helper": "^1.14"
