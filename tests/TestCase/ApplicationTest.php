@@ -52,6 +52,7 @@ class ApplicationTest extends TestCase
     public function testBootstrapCli()
     {
         $currDebug = Configure::read('debug');
+        Configure::write('debug', true);
         $app = new Application(CONFIG);
         $app->bootstrap();
         static::assertTrue($app->getPlugins()->has('Cake/Repl'));
