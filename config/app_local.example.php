@@ -15,7 +15,7 @@ return [
      * Development Mode:
      * true: Errors and warnings shown.
      */
-    'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
+    'debug' => filter_var(env('DEBUG', false), FILTER_VALIDATE_BOOLEAN),
 
     /*
      * Security and encryption configuration
@@ -109,6 +109,7 @@ return [
      */
     'EmailTransport' => [
         'default' => [
+            'className' => 'Mail',
             'host' => 'localhost',
             'port' => 25,
             'username' => null,
@@ -152,7 +153,7 @@ return [
      * - `name` public name of the project, short expression recommended like `MyProject`, `Nope v1`
      */
     'Project' => [
-        'name' => env('PROJECT_NAME', 'BEdita 5'),
+        'name' => env('PROJECT_NAME', 'MyApp'),
     ],
 
     /**
