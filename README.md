@@ -1,5 +1,8 @@
 # BEdita API template
 
+[![Github Actions](https://github.com/bedita/api-template/workflows/php/badge.svg)](https://github.com/bedita/api-template/actions?query=workflow%3Aphp)
+[![codecov](https://codecov.io/gh/bedita/api-template/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/api-template)
+
 This is the skeleton app to build BEdita5 API projects.
 
 ## Requirements
