@@ -6,7 +6,20 @@ on:
 
 jobs:
   call:
-    uses: bedita/github-workflows/.github/workflows/release.yml@main
-    with:
-      main_branch: 'master'
-      dist_branches: '["master"]'
+    env:
+       HAVE_RELEASE_TOKEN: ${{ secrets.GH_RELEASE_TOKEN != '' }}
+    steps:
+      - uses: bedita/github-workflows/.github/workflows/release.yml@feat/token
+        if: ${{ env.HAVE_RELEASE_TOKEN == 'true' }}
+        with:
+          main_branch: 'master'
+          dist_branches: '["master"]'
+          token: ${{ secrets.GH_RELEASE_TOKEN }}
+
+
+      - uses: bedita/github-workflows/.github/workflows/release.yml@feat/token
+        if: ${{ !env.HAVE_RELEASE_TOKEN == 'true' }}
+        with:
+          main_branch: 'master'
+          dist_branches: '["master"]'
+          token: ${{ secrets.GITHUB_TOKEN }}
