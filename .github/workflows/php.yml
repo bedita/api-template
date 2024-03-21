@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - name: 'Checkout current revision'
-        uses: 'actions/checkout@v2'
+        uses: 'actions/checkout@v4'
 
       - name: 'Setup PHP'
         uses: 'shivammathur/setup-php@v2'
@@ -58,7 +58,7 @@ jobs:
         run: 'echo "::set-output name=path::$(composer global config cache-dir)"'
 
       - name: 'Share Composer cache across runs'
-        uses: 'actions/cache@v2'
+        uses: 'actions/cache@v4'
         with:
           path: '${{ steps.cachedir.outputs.path }}'
           key: "composer-${{ matrix.php }}-${{ hashFiles('**/composer.json') }}"
@@ -79,7 +79,7 @@ jobs:
           env_vars: PHP_VERSION,DB_VENDOR
 
       - name: 'Archive code coverage results'
-        uses: 'actions/upload-artifact@v2'
+        uses: 'actions/upload-artifact@v4'
         with:
           name: 'PHP ${{ matrix.php }}'
           path: 'clover.xml'
