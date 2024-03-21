@@ -232,4 +232,16 @@ return [
     //     // default lang tag - may be null
     //     'default' => null,
     // ],
+
+    /*
+     * Search engine configuration.
+     */
+    // 'Search' => [
+    //     'use' => 'default',
+    //     'adapters' => [
+    //         'default' => [
+    //             'className' => SimpleAdapter::class,
+    //         ],
+    //     ],
+    // ],
 ];

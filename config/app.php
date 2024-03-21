@@ -1,6 +1,7 @@
 <?php
 
 use BEdita\API\Error\ExceptionRenderer;
+use BEdita\Core\Search\Adapter\SimpleAdapter;
 use Cake\Cache\Engine\FileEngine;
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
@@ -472,6 +473,18 @@ return [
                 'className' => 'BEdita/Core.Async',
                 // 'baseGenerator' => 'default',
                 'url' => env('THUMBNAILS_ASYNC_URL', null),
+            ],
+        ],
+    ],
+
+    /*
+     * Search engine configuration.
+     */
+    'Search' => [
+        'use' => 'default',
+        'adapters' => [
+            'default' => [
+                'className' => SimpleAdapter::class,
             ],
         ],
     ],
