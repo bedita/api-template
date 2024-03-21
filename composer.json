@@ -14,15 +14,15 @@
     },
 
     "require-dev": {
-        "cakephp/bake": "^2.8",
-        "cakephp/debug_kit": "^4.9.3",
-        "cakephp/cakephp-codesniffer": "~4.5.1",
-        "cakephp/repl": "^0.1",
-        "phpunit/phpunit": "^9.5",
         "bedita/dev-tools": "^2.1.4",
+        "cakephp/bake": "^2.8",
+        "cakephp/cakephp-codesniffer": "~4.7.0",
+        "cakephp/debug_kit": "^4.9.3",
+        "cakephp/repl": "^0.1",
+        "dereuromark/cakephp-ide-helper": "^1.18",
         "josegonzalez/dotenv": "^3.2",
         "phpstan/phpstan": "^1.9.14",
-        "dereuromark/cakephp-ide-helper": "^1.18"
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
