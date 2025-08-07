@@ -41,12 +41,27 @@
         "post-create-project-cmd": "MyApp\\Console\\Installer::postInstall",
         "check": [
             "@test",
-            "@cs-check"
+            "@cs-check",
+            "@stan"
         ],
         "stan": "vendor/bin/phpstan analyse",
         "cs-check": "vendor/bin/phpcs -n -p --extensions=php src/ tests/ config/*.php",
         "cs-fix": "vendor/bin/phpcbf -p --extensions=php src/ tests/ config/*.php",
-        "test": "vendor/bin/phpunit --colors=always"
+        "test": "vendor/bin/phpunit --colors=always",
+        "migrate": [
+            "@cache-clear",
+            "@migrations",
+            "@project-model",
+            "@cache-clear"
+        ],
+        "cache-clear": "bin/cake cache clear_all",
+        "migrations": [
+            "bin/cake migrations migrate -p BEdita/Core",
+            "bin/cake migrations migrate"
+        ],
+        "project-model": [
+            "bin/cake project_model"
+        ]
     },
     "config": {
         "sort-packages": true,
