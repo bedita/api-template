@@ -51,6 +51,7 @@
         "migrate": [
             "@cache-clear",
             "@migrations",
+            "@cache-clear",
             "@project-model",
             "@cache-clear"
         ],
