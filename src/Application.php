@@ -16,6 +16,8 @@ namespace MyApp;
 
 use BEdita\API\App\BaseApplication;
 use Cake\Core\Configure;
+use Cake\Datasource\FactoryLocator;
+use Cake\ORM\Locator\TableLocator;
 
 /**
  * Application setup class.
@@ -39,6 +41,11 @@ class Application extends BaseApplication
 
         // Load other plugins via `Plugin` configuration key
         $this->addConfigPlugins();
+
+        if (PHP_SAPI !== 'cli') {
+            // The bake plugin requires fallback table classes to work properly
+            FactoryLocator::add('Table', (new TableLocator())->allowFallbackClass(false));
+        }
     }
 
     /**
@@ -49,6 +56,7 @@ class Application extends BaseApplication
         parent::bootstrapCli();
         if (Configure::read('debug')) {
             $this->addOptionalPlugin('Cake/Repl');
+            $this->addOptionalPlugin('DebugKit');
         }
     }
 }

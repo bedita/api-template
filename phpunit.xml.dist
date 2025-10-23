@@ -8,22 +8,32 @@
     cacheDirectory=".phpunit.cache"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.1/phpunit.xsd"
 >
-    <source>
-        <include>
-            <directory suffix=".php">./src/</directory>
-        </include>
-        <exclude>
-            <file>src/Console/Installer.php</file>
-        </exclude>
-    </source>
     <php>
         <ini name="memory_limit" value="-1"/>
         <ini name="apc.enable_cli" value="1"/>
     </php>
+
     <!-- Add any additional test suites you want to run here -->
     <testsuites>
         <testsuite name="BEdita Api Template Test Suite">
             <directory>./tests/TestCase/</directory>
         </testsuite>
+        <!-- Add plugin test suites here. -->
     </testsuites>
+
+    <!-- Load extension for fixtures -->
+    <extensions>
+        <bootstrap class="Cake\TestSuite\Fixture\Extension\PHPUnitExtension"/>
+    </extensions>
+
+    <!-- Ignore vendor tests in code coverage reports -->
+    <source>
+        <include>
+            <directory suffix=".php">src/</directory>
+            <directory suffix=".php">plugins/*/src/</directory>
+        </include>
+        <exclude>
+            <file>src/Console/Installer.php</file>
+        </exclude>
+    </source>
 </phpunit>

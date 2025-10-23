@@ -14,49 +14,85 @@ declare(strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace MyApp\Test\TestCase;
 
+use Authentication\Middleware\AuthenticationMiddleware;
+use Authorization\Middleware\AuthorizationMiddleware;
+use BEdita\API\Middleware\ApplicationMiddleware;
+use BEdita\API\Middleware\BodyParserMiddleware;
+use BEdita\API\Middleware\LoggedUserMiddleware;
 use Cake\Core\Configure;
+use Cake\Error\Middleware\ErrorHandlerMiddleware;
+use Cake\Http\MiddlewareQueue;
+use Cake\Routing\Middleware\RoutingMiddleware;
+use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 use MyApp\Application;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
- * {@see MyApp\Application} Test Case
+ * ApplicationTest class
  */
-#[CoversClass(Application::class)]
-#[CoversMethod(Application::class, 'bootstrap')]
-#[CoversMethod(Application::class, 'bootstrapCli')]
 class ApplicationTest extends TestCase
 {
+    use IntegrationTestTrait;
+
     /**
-     * Test `bootstrap` method
+     * Test bootstrap in production.
      *
      * @return void
      */
     public function testBootstrap()
     {
-        Configure::write('Plugins', []);
-        $app = new Application(CONFIG);
+        Configure::write('debug', false);
+        $app = new Application(dirname(__DIR__, 2) . '/config');
         $app->bootstrap();
-        static::assertTrue($app->getPlugins()->has('BEdita/Core'));
-        static::assertTrue($app->getPlugins()->has('BEdita/API'));
-        static::assertTrue($app->getPlugins()->has('Migrations'));
+        $plugins = $app->getPlugins();
+
+        $this->assertTrue($plugins->has('Bake'), 'plugins has Bake?');
+        $this->assertFalse($plugins->has('DebugKit'), 'plugins has DebugKit?');
+        $this->assertTrue($plugins->has('Migrations'), 'plugins has Migrations?');
     }
 
     /**
-     * Test `bootstrapCli` method
+     * Test bootstrap add DebugKit plugin in debug mode.
      *
      * @return void
      */
-    public function testBootstrapCli()
+    public function testBootstrapInDebug()
     {
-        $currDebug = Configure::read('debug');
         Configure::write('debug', true);
-        $app = new Application(CONFIG);
+        $app = new Application(dirname(__DIR__, 2) . '/config');
         $app->bootstrap();
-        static::assertTrue($app->getPlugins()->has('Cake/Repl'));
-        Configure::write('debug', $currDebug);
+        $plugins = $app->getPlugins();
+
+        $this->assertTrue($plugins->has('DebugKit'), 'plugins has DebugKit?');
+    }
+
+    /**
+     * testMiddleware
+     *
+     * @return void
+     */
+    public function testMiddleware()
+    {
+        $app = new Application(dirname(__DIR__, 2) . '/config');
+        $middleware = new MiddlewareQueue();
+
+        $middleware = $app->middleware($middleware);
+
+        $this->assertInstanceOf(ErrorHandlerMiddleware::class, $middleware->current());
+        $middleware->seek(1);
+        $this->assertInstanceOf(RoutingMiddleware::class, $middleware->current());
+        $middleware->seek(2);
+        $this->assertInstanceOf(BodyParserMiddleware::class, $middleware->current());
+        $middleware->seek(3);
+        $this->assertInstanceOf(AuthenticationMiddleware::class, $middleware->current());
+        $middleware->seek(4);
+        $this->assertInstanceOf(ApplicationMiddleware::class, $middleware->current());
+        $middleware->seek(5);
+        $this->assertInstanceOf(LoggedUserMiddleware::class, $middleware->current());
+        $middleware->seek(6);
+        $this->assertInstanceOf(AuthorizationMiddleware::class, $middleware->current());
     }
 }

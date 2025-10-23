@@ -6,6 +6,7 @@ use Cake\Cache\Engine\FileEngine;
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
 use Cake\Log\Engine\FileLog;
+use Cake\Mailer\Transport\MailTransport;
 
 return [
     /**
@@ -118,9 +119,9 @@ return [
          * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
          * If you set 'className' => 'Null' core cache will be disabled.
          */
-        '_cake_core_' => [
+        '_cake_translations_' => [
             'className' => FileEngine::class,
-            'prefix' => 'myapp_cake_core_',
+            'prefix' => 'myapp_cake_translations_',
             'path' => CACHE . 'persistent' . DS,
             'serialize' => true,
             'duration' => '+1 years',
@@ -169,7 +170,7 @@ return [
         ],
     ],
 
-    /**
+    /*
      * Configure the Error and Exception handlers used by your application.
      *
      * By default errors are displayed using Debugger, when debug is true and logged
@@ -183,11 +184,11 @@ return [
      * Options:
      *
      * - `errorLevel` - int - The level of errors you are interested in capturing.
-     * - `trace` - boolean - Whether or not backtraces should be included in
+     * - `trace` - boolean - Whether backtraces should be included in
      *   logged errors/exceptions.
-     * - `log` - boolean - Whether or not you want exceptions logged.
+     * - `log` - boolean - Whether you want exceptions logged.
      * - `exceptionRenderer` - string - The class responsible for rendering uncaught exceptions.
-     *   The chosen class will be used for for both CLI and web environments. If you want different
+     *   The chosen class will be used for both CLI and web environments. If you want different
      *   classes used in CLI and web environments you'll need to write that conditional logic as well.
      *   The conventional location for custom renderers is in `src/Error`. Your exception renderer needs to
      *   implement the `render()` method and return either a string or Http\Response.
@@ -202,7 +203,7 @@ return [
      * - `extraFatalErrorMemory` - int - The number of megabytes to increase the memory limit by
      *   when a fatal error is encountered. This allows
      *   breathing room to complete logging or error handling.
-     * - `ignoredDeprecationPaths` - array - A list of glob compatible file paths that deprecations
+     * - `ignoredDeprecationPaths` - array - A list of glob-compatible file paths that deprecations
      *   should be ignored in. Use this to ignore deprecations for plugins or parts of
      *   your application that still emit deprecations.
      */
@@ -212,10 +213,10 @@ return [
         'skipLog' => ['Cake\Network\Exception\NotFoundException', 'BEdita\API\Exception\ExpiredTokenException'],
         'log' => true,
         'trace' => true,
-        'ignoredDeprecationPaths' => [],
+        'ignoredDeprecationPaths' => ['vendor/cakephp/cakephp/src/Log/Engine/FileLog.php'],
     ],
 
-    /**
+    /*
      * Debugger configuration
      *
      * Define development error values for Cake\Error\Debugger
@@ -231,7 +232,7 @@ return [
         'editor' => 'vscode',
     ],
 
-    /**
+    /*
      * Email configuration.
      *
      * By defining transports separately from delivery profiles you can easily
@@ -252,17 +253,32 @@ return [
      */
     'EmailTransport' => [
         'default' => [
+            'className' => MailTransport::class,
+            /*
+             * The keys host, port, timeout, username, password, client and tls
+             * are used in SMTP transports
+             */
+            //'host' => 'localhost',
+            //'port' => 25,
+            //'timeout' => 30,
+            /*
+             * It is recommended to set these options through your environment or app_local.php
+             */
+            //'username' => null,
+            //'password' => null,
+            //'client' => null,
+            //'tls' => false,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
 
-    /**
+    /*
      * Email delivery profiles
      *
      * Delivery profiles allow you to predefine various properties about email
      * messages from your application and give the settings a name. This saves
      * duplication across your application and makes maintenance and development
-     * easier. Each profile accepts a number of keys. See `Cake\Mailer\Email`
+     * easier. Each profile accepts a number of keys. See `Cake\Mailer\Mailer`
      * for more information.
      */
     'Email' => [
@@ -277,14 +293,14 @@ return [
         ],
     ],
 
-    /**
+    /*
      * Connection information used by the ORM to connect
      * to your application's datastores.
      *
      * ### Notes
      * - Drivers include Mysql Postgres Sqlite Sqlserver
-     *   See vendor\cakephp\cakephp\src\Database\Driver for complete list
-     * - Do not use periods in database name - it may lead to error.
+     *   See vendor\cakephp\cakephp\src\Database\Driver for the complete list
+     * - Do not use periods in database name - it may lead to errors.
      *   See https://github.com/cakephp/cakephp/issues/6471 for details.
      * - 'encoding' is recommended to be set to full UTF-8 4-Byte support.
      *   E.g set it to 'utf8mb4' in MariaDB and MySQL and 'utf8' for any
@@ -298,8 +314,8 @@ return [
          * The values in app_local.php will override any values set here
          * and should be used for local and per-environment configurations.
          *
-         * Environment variable based configurations can be loaded here or
-         * in app_local.php depending on the applications needs.
+         * Environment variable-based configurations can be loaded here or
+         * in app_local.php depending on the application's needs.
          */
         'default' => [
             'className' => Connection::class,
@@ -345,6 +361,16 @@ return [
          * The test connection is used during the test suite.
          */
         'test' => [
+            // 'className' => Connection::class,
+            // 'driver' => Mysql::class,
+            // 'persistent' => false,
+            // 'timezone' => 'UTC',
+            // 'encoding' => 'utf8mb4',
+            // 'flags' => [],
+            // 'cacheMetadata' => true,
+            // 'quoteIdentifiers' => false,
+            // 'log' => false,
+            //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
             'url' => env('DATABASE_TEST_URL', 'sqlite:///tmp/bedita5_test.sqlite'),
         ],
     ],
@@ -379,7 +405,7 @@ return [
         ],
     ],
 
-    /**
+    /*
      * Session configuration.
      *
      * Contains an array of settings to use for session configuration. The
@@ -392,18 +418,23 @@ return [
      *    Avoid using `.` in cookie names, as PHP will drop sessions from cookies with `.` in the name.
      * - `cookiePath` - The url path for which session cookie is set. Maps to the
      *   `session.cookie_path` php.ini config. Defaults to base path of app.
-     * - `timeout` - The time in minutes the session should be valid for.
-     *    Pass 0 to disable checking timeout.
-     *    Please note that php.ini's session.gc_maxlifetime must be equal to or greater
-     *    than the largest Session['timeout'] in all served websites for it to have the
-     *    desired effect.
+     * - `timeout` - The time in minutes a session can be 'idle'. If no request is received in
+     *    this duration, the session will be expired and rotated. Pass 0 to disable idle timeout checks.
      * - `defaults` - The default configuration set to use as a basis for your session.
      *    There are four built-in options: php, cake, cache, database.
      * - `handler` - Can be used to enable a custom session handler. Expects an
      *    array with at least the `engine` key, being the name of the Session engine
      *    class to use for managing the session. CakePHP bundles the `CacheSession`
      *    and `DatabaseSession` engines.
-     * - `ini` - An associative array of additional ini values to set.
+     * - `ini` - An associative array of additional 'session.*` ini values to set.
+     *
+     * Within the `ini` key, you will likely want to define:
+     *
+     * - `session.cookie_lifetime` - The number of seconds that cookies are valid for. This
+     *    should be longer than `Session.timeout`.
+     * - `session.gc_maxlifetime` - The number of seconds after which a session is considered 'garbage'
+     *    that can be deleted by PHP's session cleanup behavior. This value should be greater than both
+     *    `Sesssion.timeout` and `session.cookie_lifetime`.
      *
      * The built-in `defaults` options are:
      *
@@ -412,7 +443,7 @@ return [
      * - 'database' - Uses CakePHP's database sessions.
      * - 'cache' - Use the Cache class to save sessions.
      *
-     * To define a custom session handler, save it at src/Network/Session/<name>.php.
+     * To define a custom session handler, save it at src/Http/Session/<name>.php.
      * Make sure the class implements PHP's `SessionHandlerInterface` and set
      * Session.handler to <name>
      *
@@ -420,6 +451,48 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
+    ],
+
+    /**
+     * DebugKit configuration.
+     *
+     * Contains an array of configurations to apply to the DebugKit plugin, if loaded.
+     * Documentation: https://book.cakephp.org/debugkit/5/en/index.html#configuration
+     *
+     * ## Options
+     *
+     *  - `panels` - Enable or disable panels. The key is the panel name, and the value is true to enable,
+     *     or false to disable.
+     *  - `includeSchemaReflection` - Set to true to enable logging of schema reflection queries. Disabled by default.
+     *  - `safeTld` - Set an array of whitelisted TLDs for local development.
+     *  - `forceEnable` - Force DebugKit to display. Careful with this, it is usually safer to simply whitelist
+     *     your local TLDs.
+     *  - `ignorePathsPattern` - Regex pattern (including delimiter) to ignore paths.
+     *     DebugKit won’t save data for request URLs that match this regex.
+     *  - `ignoreAuthorization` - Set to true to ignore Cake Authorization plugin for DebugKit requests.
+     *     Disabled by default.
+     *  - `maxDepth` - Defines how many levels of nested data should be shown in general for debug output.
+     *     Default is 5. WARNING: Increasing the max depth level can lead to an out of memory error.
+     *  - `variablesPanelMaxDepth` - Defines how many levels of nested data should be shown in the variables tab.
+     *     Default is 5. WARNING: Increasing the max depth level can lead to an out of memory error.
+     */
+    'DebugKit' => [
+        'forceEnable' => filter_var(env('DEBUG_KIT_FORCE_ENABLE', false), FILTER_VALIDATE_BOOLEAN),
+        'safeTld' => env('DEBUG_KIT_SAFE_TLD', null),
+        'ignoreAuthorization' => env('DEBUG_KIT_IGNORE_AUTHORIZATION', false),
+    ],
+
+    /**
+     * TestSuite configuration.
+     *
+     * ## Options
+     *
+     *  - `errorLevel` - Defaults to `E_ALL`. Can be set to `false` to disable overwrite error level.
+     *  - `fixtureStrategy` - Defaults to TruncateStrategy. Can be set to any class implementing FixtureStrategyInterface.
+     */
+    'TestSuite' => [
+        'errorLevel' => null,
+        'fixtureStrategy' => null,
     ],
 
     /**

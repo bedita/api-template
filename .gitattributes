@@ -1,7 +1,6 @@
 # Define the line ending behavior of the different file extensions
 # Set default behavior, in case users don't have core.autocrlf set.
-* text=auto
-* text eol=lf
+* text text=auto eol=lf
 
 # Explicitly declare text files we want to always be normalized and converted
 # to native line endings on checkout.
@@ -33,6 +32,7 @@
 *.jpeg binary
 *.gif binary
 *.webp binary
+*.avif binary
 *.ico binary
 *.mo binary
 *.pdf binary
@@ -41,6 +41,7 @@
 *.phar binary
 *.woff binary
 *.woff2 binary
+*.ttc binary
 *.ttf binary
 *.otf binary
 *.eot binary
