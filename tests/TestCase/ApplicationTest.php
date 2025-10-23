@@ -19,19 +19,21 @@ namespace MyApp\Test\TestCase;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use MyApp\Application;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
  * {@see MyApp\Application} Test Case
- *
- * @coversDefaultClass \MyApp\Application
  */
+#[CoversClass(Application::class)]
+#[CoversMethod(Application::class, 'bootstrap')]
+#[CoversMethod(Application::class, 'bootstrapCli')]
 class ApplicationTest extends TestCase
 {
     /**
      * Test `bootstrap` method
      *
      * @return void
-     * @covers ::bootstrap()
      */
     public function testBootstrap()
     {
@@ -47,7 +49,6 @@ class ApplicationTest extends TestCase
      * Test `bootstrapCli` method
      *
      * @return void
-     * @covers ::bootstrapCli()
      */
     public function testBootstrapCli()
     {
