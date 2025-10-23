@@ -56,5 +56,6 @@ class Application extends BaseApplication
             $this->addOptionalPlugin('Cake/Repl');
             $this->addOptionalPlugin('DebugKit');
         }
+        $this->addOptionalPlugin('IdeHelper');
     }
 }
