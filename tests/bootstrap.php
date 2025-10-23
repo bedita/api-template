@@ -26,7 +26,17 @@ use Cake\Datasource\ConnectionManager;
  */
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-require dirname(__DIR__) . '/config/bootstrap.php';
+define('ROOT', dirname(__DIR__));
+define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp');
+define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
+define('CAKE', CORE_PATH . 'src' . DS);
+define('TMP', sys_get_temp_dir() . DS);
+define('LOGS', ROOT . DS . 'logs' . DS);
+define('CONFIG', ROOT . DS . 'config' . DS);
+define('CACHE', TMP . 'cache' . DS);
+
+require CORE_PATH . 'config' . DS . 'bootstrap.php';
+require CAKE . 'functions.php';
 
 if (empty($_SERVER['HTTP_HOST']) && !Configure::read('App.fullBaseUrl')) {
     Configure::write('App.fullBaseUrl', 'http://localhost');
@@ -44,21 +54,10 @@ ConnectionManager::setConfig('test_debug_kit', [
     'quoteIdentifiers' => false,
 ]);
 
+//ConnectionManager::alias('test', 'default');
 ConnectionManager::alias('test_debug_kit', 'debug_kit');
 
-// Fixate sessionid early on, as php7.2+
-// does not allow the sessionid to be set after stdout
-// has been written to.
-session_id('cli');
-
-// Use migrations to build test database schema.
-//
-// Will rebuild the database if the migration state differs
-// from the migration history in files.
-//
-// If you are not using CakePHP's migrations you can
-// hook into your migration tool of choice here or
-// load schema from a SQL dump file with
-// use Cake\TestSuite\Fixture\SchemaLoader;
-// (new SchemaLoader())->loadSqlFiles('./tests/schema.sql', 'test');
-// (new Migrator())->run();
+// (new Migrator())->runMany([
+//     ['plugin' => 'BEdita/Core', 'connection' => 'test'],
+//     ['connection' => 'test'], // default migrations of this application
+// ]);
