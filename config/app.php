@@ -505,11 +505,13 @@ return [
         'default' => [
             'className' => 'BEdita/Core.Local',
             'path' => WWW_ROOT . '_files',
+            'baseUrl' => env('FILESYSTEM_BASE_DEFAULT_URL', null),
             'url' => env('FILESYSTEM_DEFAULT_URL', null),
         ],
         'thumbnails' => [
             'className' => 'BEdita/Core.Local',
             'path' => WWW_ROOT . '_files' . DS . 'thumbs',
+            'baseUrl' => env('FILESYSTEM_BASE_THUMBNAILS_URL', null),
             'url' => env('FILESYSTEM_THUMBNAILS_URL', null),
         ],
     ],
