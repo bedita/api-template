@@ -14,7 +14,7 @@
     },
     "minimum-stability": "dev",
     "require-dev": {
-        "bedita/dev-tools": "4.x-dev",
+        "bedita/dev-tools": "^3.2",
         "cakephp/bake": "^3.5.0",
         "cakephp/cakephp-codesniffer": "^5.0",
         "cakephp/debug_kit": "^5.3.0",
