@@ -25,6 +25,7 @@
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpunit/phpunit": "^11.5 || ^12.1"
     },
+    "minimum-stability": "dev",
     "suggest": {
         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification."
     },
