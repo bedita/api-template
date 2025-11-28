@@ -24,7 +24,7 @@
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 
-return static function (RouteBuilder $routes) {
+return function (RouteBuilder $routes): void {
     /*
      * The default class to use for all routes
      *

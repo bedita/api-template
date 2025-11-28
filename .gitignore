@@ -1,5 +1,5 @@
-# User specific & automatically generated files #
-#################################################
+# CakePHP specific files #
+##########################
 /config/app_local.php
 /config/.env
 /logs/*
@@ -29,7 +29,7 @@ Thumbs.db
 # Tool specific files #
 #######################
 # PHPUnit
-.phpunit.result.cache
+.phpunit.cache
 tests.sqlite
 # vim
 *~

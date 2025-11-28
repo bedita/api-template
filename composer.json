@@ -6,23 +6,28 @@
     "license": "MIT",
     "require": {
         "php": ">=8.3",
-        "bedita/api": "^5.43",
-        "bedita/aws": "^3.0.5",
-        "bedita/core": "^5.43",
-        "cakephp/cakephp": "^4.5.0",
-        "cakephp/plugin-installer": "^1.3.1"
+        "bedita/api": "^6.0",
+        "bedita/aws": "^5.0",
+        "bedita/core": "^6.0",
+        "cakephp/cakephp": "~5.2.9",
+        "cakephp/plugin-installer": "^2.0"
     },
-
     "require-dev": {
-        "bedita/dev-tools": "^2",
-        "cakephp/bake": "^2.8",
-        "cakephp/cakephp-codesniffer": "~4.7.0",
-        "cakephp/debug_kit": "^4.9.3",
-        "cakephp/repl": "^0.1",
-        "dereuromark/cakephp-ide-helper": "^1.18",
-        "josegonzalez/dotenv": "^3.2",
+        "bedita/dev-tools": "^3.2",
+        "cakephp/bake": "^3.5.0",
+        "cakephp/cakephp-codesniffer": "^5.0",
+        "cakephp/debug_kit": "^5.3.0",
+        "cakephp/repl": "^2.0.1",
+        "dereuromark/cakephp-ide-helper": "^2.5.3",
+        "josegonzalez/dotenv": "^4.0",
         "phpstan/phpstan": "^1.10",
-        "phpunit/phpunit": "^9.6"
+        "phpstan/extension-installer": "^1.0",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpunit/phpunit": "^11.5 || ^12.1"
+    },
+    "minimum-stability": "dev",
+    "suggest": {
+        "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification."
     },
     "autoload": {
         "psr-4": {
@@ -45,8 +50,8 @@
             "@stan"
         ],
         "stan": "vendor/bin/phpstan analyse",
-        "cs-check": "vendor/bin/phpcs -n -p --extensions=php src/ tests/ config/*.php",
-        "cs-fix": "vendor/bin/phpcbf -p --extensions=php src/ tests/ config/*.php",
+        "cs-check": "vendor/bin/phpcs -n -p --extensions=php --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ config/*.php",
+        "cs-fix": "vendor/bin/phpcbf -p --extensions=php --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/ config/*.php",
         "test": "vendor/bin/phpunit --colors=always",
         "migrate": [
             "@cache-clear",
@@ -67,8 +72,9 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
+            "cakephp/plugin-installer": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "cakephp/plugin-installer": true
+            "phpstan/extension-installer": true
         }
     }
 }

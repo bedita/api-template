@@ -15,8 +15,10 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
 
+use Cake\Chronos\Chronos;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
+use Cake\TestSuite\ConnectionHelper;
 
 /**
  * Test runner bootstrap.
@@ -46,10 +48,17 @@ ConnectionManager::setConfig('test_debug_kit', [
 
 ConnectionManager::alias('test_debug_kit', 'debug_kit');
 
+// Fixate now to avoid one-second-leap-issues
+Chronos::setTestNow(Chronos::now());
+
 // Fixate sessionid early on, as php7.2+
 // does not allow the sessionid to be set after stdout
 // has been written to.
 session_id('cli');
+
+// Connection aliasing needs to happen before migrations are run.
+// Otherwise, table objects inside migrations would use the default datasource
+ConnectionHelper::addTestAliases();
 
 // Use migrations to build test database schema.
 //
@@ -61,4 +70,5 @@ session_id('cli');
 // load schema from a SQL dump file with
 // use Cake\TestSuite\Fixture\SchemaLoader;
 // (new SchemaLoader())->loadSqlFiles('./tests/schema.sql', 'test');
+
 // (new Migrator())->run();
