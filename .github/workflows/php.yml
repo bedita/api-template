@@ -40,8 +40,24 @@ jobs:
       fail-fast: false
       matrix:
         php-version: [8.3, 8.4]
+        db:
+          - '{"vendor": "SQLite", "pdo": "sqlite", "dsn": "sqlite://tmp/test.sql", "db_name": "", "image": "nginx:alpine", "options": "--health-cmd \"/bin/true\" --health-interval 1s --health-timeout 2s --health-retries 5"}'
+          - '{"vendor": "PostgreSQL 18", "pdo": "pgsql", "dsn": "postgres://bedita:bedita@127.0.0.1:5432/bedita", "image": "postgres:18", "options": "--health-cmd \"pg_isready\" --health-interval 10s --health-timeout 5s --health-retries 5"}'
     env:
       PHP_VERSION: '${{ matrix.php-version }}'
+      DATABASE_URL: '${{ fromJson(matrix.db).dsn }}'
+      DATABASE_TEST_URL: '${{ fromJson(matrix.db).dsn }}'
+
+    services:
+      db:
+        image: '${{ fromJson(matrix.db).image }}'
+        env:
+          POSTGRES_USER: 'bedita'
+          POSTGRES_PASSWORD: 'bedita'
+          POSTGRES_DB: 'bedita'
+        ports:
+          - '5432:5432'
+        options: '${{ fromJson(matrix.db).options }}'
 
     steps:
       - name: 'Checkout current revision'
@@ -52,7 +68,7 @@ jobs:
         with:
           php-version: '${{ matrix.php-version }}'
           tools: 'composer'
-          extensions: 'mbstring, intl'
+          extensions: 'mbstring, intl, pdo_${{ fromJson(matrix.db).pdo }}'
           coverage: 'pcov'
           ini-values: 'pcov.directory=., pcov.exclude="~vendor~"'
 
