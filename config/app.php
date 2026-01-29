@@ -213,7 +213,10 @@ return [
         'skipLog' => ['Cake\Network\Exception\NotFoundException', 'BEdita\API\Exception\ExpiredTokenException'],
         'log' => true,
         'trace' => true,
-        'ignoredDeprecationPaths' => ['vendor/cakephp/cakephp/src/Log/Engine/FileLog.php'],
+        'ignoredDeprecationPaths' => [
+            'vendor/cakephp/cakephp/src/Log/Engine/FileLog.php',
+            'vendor/cakephp/migrations/src/Db/Table/ForeignKey.php',
+        ],
     ],
 
     /*

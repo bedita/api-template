@@ -7,24 +7,25 @@
     bootstrap="./tests/bootstrap.php"
     cacheDirectory=".phpunit.cache"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.1/phpunit.xsd"
+    displayDetailsOnTestsThatTriggerDeprecations="false"
+    displayDetailsOnTestsThatTriggerErrors="false"
+    displayDetailsOnTestsThatTriggerNotices="false"
+    displayDetailsOnTestsThatTriggerWarnings="false"
+    displayDetailsOnPhpunitDeprecations="false"
 >
     <php>
         <ini name="memory_limit" value="-1"/>
         <ini name="apc.enable_cli" value="1"/>
+        <const name="UNIT_TEST_RUN" value="1"/>
     </php>
 
     <!-- Add any additional test suites you want to run here -->
     <testsuites>
-        <testsuite name="BEdita Api Template Test Suite">
+        <testsuite name="MyApp">
             <directory>./tests/TestCase/</directory>
         </testsuite>
         <!-- Add plugin test suites here. -->
     </testsuites>
-
-    <!-- Load extension for fixtures -->
-    <extensions>
-        <bootstrap class="Cake\TestSuite\Fixture\Extension\PHPUnitExtension"/>
-    </extensions>
 
     <!-- Ignore vendor tests in code coverage reports -->
     <source>
