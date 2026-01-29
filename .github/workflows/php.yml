@@ -93,6 +93,19 @@ jobs:
       - name: 'Install dependencies with Composer'
         run: 'composer install --prefer-dist --no-interaction'
 
+      - name: 'Wait for MySQL to be ready'
+        if: ${{ fromJson(matrix.db).pdo == 'mysql' }}
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h 127.0.0.1 -u"bedita" -p"bedita" --silent; then
+              echo "MySQL is up!"
+              break
+            fi
+            echo "Waiting for MySQL... ($i)"
+            sleep 2
+          done
+          mysqladmin ping -h 127.0.0.1 -u"bedita" -p"bedita" --silent || (echo "MySQL did not become available in time" && exit 1)
+
       - name: 'Run PHPUnit with coverage'
         run: 'vendor/bin/phpunit --coverage-clover=${{ matrix.php-version }}-${{ strategy.job-index }}-clover.xml'
 
