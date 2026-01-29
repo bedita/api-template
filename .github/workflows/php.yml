@@ -61,6 +61,7 @@ jobs:
           POSTGRES_PASSWORD: 'bedita'
           POSTGRES_DB: 'bedita'
         ports:
+          - '3306:3306'
           - '5432:5432'
         options: '${{ fromJson(matrix.db).options }}'
 
