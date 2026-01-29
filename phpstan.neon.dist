@@ -7,3 +7,4 @@ parameters:
     - tests
   excludePaths:
     - src/Console/Installer.php
+    - tests/Fixture

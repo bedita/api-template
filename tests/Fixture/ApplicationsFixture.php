@@ -11,9 +11,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 class ApplicationsFixture extends TestFixture
 {
     /**
-     * Records
-     *
-     * @var array
+     * @inheritDoc
      */
     public array $records = [
         [
