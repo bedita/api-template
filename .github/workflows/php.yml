@@ -24,12 +24,17 @@ jobs:
   cs:
     uses: bedita/github-workflows/.github/workflows/php-cs.yml@v2
     with:
-      php_versions: '["8.4"]'
+      php_versions: '["8.5"]'
+
+  psalm:
+    uses: bedita/github-workflows/.github/workflows/php-psalm.yml@v2
+    with:
+      php_versions: '["8.5"]'
 
   stan:
     uses: bedita/github-workflows/.github/workflows/php-stan.yml@v2
     with:
-      php_versions: '["8.4"]'
+      php_versions: '["8.5"]'
 
   unit:
     name: 'Run unit tests'
@@ -39,7 +44,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: [8.3, 8.4]
+        php-version: [8.3, 8.4, 8.5]
         db:
           - '{"vendor": "MySQL 8.4", "pdo": "mysql", "dsn": "mysql://bedita:bedita@127.0.0.1:3306/bedita", "image": "mysql:8.4", "options": "--health-cmd \"mysqladmin ping -h localhost\" --health-interval 10s --health-timeout 5s --health-retries 5"}'
           - '{"vendor": "SQLite", "pdo": "sqlite", "dsn": "sqlite://tmp/test.sql", "db_name": "", "image": "nginx:alpine", "options": "--health-cmd \"/bin/true\" --health-interval 1s --health-timeout 2s --health-retries 5"}'
