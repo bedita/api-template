@@ -6,10 +6,16 @@
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
+    <issueHandlers>
+        <ClassMustBeFinal errorLevel="suppress" />
+        <MissingOverrideAttribute errorLevel="suppress" />
+        <UnusedClass errorLevel="suppress" />
+    </issueHandlers>
     <projectFiles>
         <directory name="src/"/>
         <ignoreFiles>
             <directory name="vendor/"/>
+            <file name="src/Console/Installer.php"/>
         </ignoreFiles>
     </projectFiles>
 </psalm>
