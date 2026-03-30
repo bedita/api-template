@@ -103,7 +103,7 @@ jobs:
         run: 'vendor/bin/phpunit --coverage-clover=${{ matrix.php-version }}-${{ strategy.job-index }}-clover.xml'
 
       - name: 'Export coverage results'
-        uses: 'codecov/codecov-action@v5'
+        uses: 'codecov/codecov-action@v6'
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # required
           files: './${{ matrix.php-version }}-${{ strategy.job-index }}-clover.xml'
