@@ -1,0 +1,7 @@
+[
+    {
+        "name": "async_jobs",
+        "description": "Async jobs endpoint",
+        "enabled": true
+    }
+]

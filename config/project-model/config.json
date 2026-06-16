@@ -1,0 +1,57 @@
+[
+    {
+        "name": "I18n",
+        "context": "app",
+        "content": {
+            "languages": {
+                "en": "English"
+            },
+            "default": "en"
+        },
+        "application": "manager"
+    },
+    {
+        "name": "Modules",
+        "context": "app",
+        "content": {
+            "objects": {
+                "color": "#230637",
+                "shortLabel": "obj",
+                "sort": "-modified"
+            },
+            "folders": {
+                "color": "#072440"
+            },
+            "documents": {
+                "color": "#cc4700"
+            },
+            "media": {
+                "color": "#a80019"
+            },
+            "images": {
+                "color": "#d5002b"
+            },
+            "files": {
+                "color": "#d5002b"
+            },
+            "users": {
+                "color": "#000000"
+            },
+            "profiles": {
+                "color": "#093"
+            },
+            "mail_templates": {
+                "color": "#8610B3"
+            }
+        },
+        "application": "manager"
+    },
+    {
+        "name": "Status",
+        "context": "core",
+        "content": {
+            "level": "on"
+        },
+        "application": "app"
+    }
+]

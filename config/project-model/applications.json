@@ -1,0 +1,12 @@
+[
+    {
+        "name": "manager",
+        "description": "Manager application",
+        "enabled": true
+    },
+    {
+        "name": "app",
+        "description": "Default application",
+        "enabled": true
+    }
+]

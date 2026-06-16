@@ -1,0 +1,9 @@
+[
+    {
+        "endpoint_name": "async_jobs",
+        "application_name": null,
+        "role_name": "admin",
+        "read": true,
+        "write": true
+    }
+]

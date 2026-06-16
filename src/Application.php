@@ -33,17 +33,8 @@ class Application extends BaseApplication
         // Call parent to load bootstrap from files.
         parent::bootstrap();
 
-        // Load more plugins here
-        $this->addPlugin('BEdita/Core', ['bootstrap' => true]);
-        $this->addPlugin('BEdita/API', ['bootstrap' => true, 'routes' => true]);
-
         // Load other plugins via `Plugin` configuration key
         $this->addConfigPlugins();
-
-        // if (PHP_SAPI !== 'cli') {
-        //     // The bake plugin requires fallback table classes to work properly
-        //     FactoryLocator::add('Table', (new TableLocator())->allowFallbackClass(false));
-        // }
     }
 
     /**

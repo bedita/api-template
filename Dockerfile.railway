@@ -1,0 +1,51 @@
+FROM chialab/php:8.5-fpm-alpine
+
+# Install nginx and curl
+RUN apk add --no-cache nginx curl supervisor cronie
+
+# Copy application code
+COPY . /var/www/html
+
+# Copy supervisord, nginx, php-fpm, config and startup script
+COPY deploy/railway/supervisord.conf /etc/supervisord.conf
+COPY deploy/railway/nginx.conf /etc/nginx/http.d/default.conf
+COPY deploy/railway/www.conf /usr/local/etc/php-fpm.d/www.conf
+COPY deploy/railway/setup-cron.php /setup-cron.php
+
+# Copy app configuration
+COPY deploy/railway/app_local.php /var/www/html/config/app_local.php
+
+# Copy entrypoint script
+# This script performs initialization tasks before supervisord starts
+COPY deploy/railway/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Default PHP runtime settings for Railway/local containers.
+# These can be overridden via environment variables at runtime.
+ENV PHP_MEMORY_LIMIT=512M \
+    PHP_POST_MAX_SIZE=32M \
+    PHP_UPLOAD_MAX_FILESIZE=32M
+
+# Install Composer dependencies
+RUN composer install --no-dev --prefer-dist --no-interaction
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html
+
+# Create files directory and set permissions
+RUN mkdir -p /var/www/html/webroot/_files && chown -R www-data:www-data /var/www/html/webroot/_files
+# Create nginx run directory
+RUN mkdir -p /run/nginx
+
+WORKDIR /var/www/html
+
+# Expose HTTP port
+EXPOSE 80
+
+# Healthcheck (optional)
+HEALTHCHECK --interval=120s --timeout=5s --retries=3 CMD curl --fail http://localhost || exit 1
+
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
+
+# Start both services
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
