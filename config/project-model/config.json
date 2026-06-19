@@ -4,9 +4,10 @@
         "context": "app",
         "content": {
             "languages": {
-                "en": "English"
+                "en": "English",
+                "it": "Italiano"
             },
-            "default": "en"
+            "default": "it"
         },
         "application": "manager"
     },
@@ -20,10 +21,10 @@
                 "sort": "-modified"
             },
             "folders": {
-                "color": "#072440"
+                "color": "#6FB78B"
             },
             "documents": {
-                "color": "#cc4700"
+                "color": "#D95700"
             },
             "media": {
                 "color": "#a80019"
@@ -35,13 +36,118 @@
                 "color": "#d5002b"
             },
             "users": {
-                "color": "#000000"
+                "color": "#000000",
+                "annotations": true
             },
             "profiles": {
                 "color": "#093"
             },
             "mail_templates": {
                 "color": "#8610B3"
+            },
+            "translations": {
+                "color": "#FF00FF"
+            }
+        },
+        "application": "manager"
+    },
+    {
+        "name": "Properties",
+        "context": "app",
+        "content": {
+            "mail_templates": {
+                "filter": [
+                    "status"
+                ],
+                "index": [
+                    "title",
+                    "uname",
+                    "lang"
+                ],
+                "view": {
+                    "core": [
+                        "title",
+                        "body"
+                    ],
+                    "advanced": [
+                        "extra"
+                    ],
+                    "_hide": [
+                        "description"
+                    ]
+                }
+            },
+            "users": {
+                "fastCreate": {
+                    "required": [
+                        "status",
+                        "username"
+                    ],
+                    "all": [
+                        "status",
+                        "username",
+                        "name",
+                        "surname",
+                        "email"
+                    ]
+                },
+                "filter": [
+                    "status",
+                    "roles"
+                ],
+                "index": [
+                    "username",
+                    {
+                        "roles": [
+                            "name"
+                        ]
+                    },
+                    "name",
+                    "surname"
+                ],
+                "view": {
+                    "_keep": [
+                        "password",
+                        "confirm-password"
+                    ],
+                    "core": [
+                        "username",
+                        "password",
+                        "confirm-password",
+                        "name",
+                        "surname",
+                        "email",
+                        "vat_number",
+                        "phone",
+                        "title",
+                        "birthdate"
+                    ],
+                    "address": [
+                        "street_address",
+                        "city",
+                        "zipcode",
+                        "country",
+                        "state_name"
+                    ],
+                    "_hide": [
+                        "description",
+                        "body",
+                        "user_preferences",
+                        "publish_start",
+                        "publish_end",
+                        "person_title",
+                        "deathdate",
+                        "company",
+                        "company_name",
+                        "company_kind",
+                        "website",
+                        "national_id_number",
+                        "pseudonym"
+                    ],
+                    "advanced": [
+                        "extra"
+                    ]
+                }
             }
         },
         "application": "manager"
@@ -52,6 +158,6 @@
         "content": {
             "level": "on"
         },
-        "application": "app"
+        "application": "default"
     }
 ]

@@ -1,7 +1,28 @@
 [
     {
+        "endpoint_name": null,
+        "application_name": "default",
+        "role_name": null,
+        "read": false,
+        "write": false
+    },
+    {
         "endpoint_name": "async_jobs",
         "application_name": null,
+        "role_name": "admin",
+        "read": true,
+        "write": true
+    },
+    {
+        "endpoint_name": "auth",
+        "application_name": "default",
+        "role_name": "admin",
+        "read": true,
+        "write": true
+    },
+    {
+        "endpoint_name": "auth",
+        "application_name": "manager",
         "role_name": "admin",
         "read": true,
         "write": true

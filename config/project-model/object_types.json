@@ -1,16 +1,18 @@
 [
     {
-        "is_abstract": true,
-        "singular": "object",
-        "name": "objects",
-        "description": "Base BEdita object type, to be extended by concrete implementations",
-        "associations": null,
+        "is_abstract": false,
+        "singular": "audio_item",
+        "name": "audio",
+        "description": "Audio media model",
+        "associations": [
+            "Streams"
+        ],
         "hidden": null,
-        "enabled": true,
+        "enabled": false,
         "translation_rules": null,
         "is_translatable": false,
-        "table": "BEdita/Core.Objects",
-        "parent_name": null
+        "table": "BEdita/Core.Media",
+        "parent_name": "media"
     },
     {
         "is_abstract": false,
@@ -27,15 +29,99 @@
     },
     {
         "is_abstract": false,
+        "singular": "event",
+        "name": "events",
+        "description": "Event model, with date ranges",
+        "associations": [
+            "DateRanges"
+        ],
+        "hidden": null,
+        "enabled": false,
+        "translation_rules": null,
+        "is_translatable": false,
+        "table": "BEdita/Core.Objects",
+        "parent_name": "objects"
+    },
+    {
+        "is_abstract": false,
+        "singular": "file",
+        "name": "files",
+        "description": "Files media model",
+        "associations": [
+            "Streams"
+        ],
+        "hidden": null,
+        "enabled": true,
+        "translation_rules": null,
+        "is_translatable": false,
+        "table": "BEdita/Core.Media",
+        "parent_name": "media"
+    },
+    {
+        "is_abstract": false,
         "singular": "folder",
         "name": "folders",
         "description": "Folder model",
         "associations": null,
         "hidden": null,
-        "enabled": false,
+        "enabled": true,
         "translation_rules": null,
         "is_translatable": false,
         "table": "BEdita/Core.Folders",
+        "parent_name": "objects"
+    },
+    {
+        "is_abstract": false,
+        "singular": "image",
+        "name": "images",
+        "description": "Image model",
+        "associations": [
+            "Streams"
+        ],
+        "hidden": null,
+        "enabled": true,
+        "translation_rules": null,
+        "is_translatable": false,
+        "table": "BEdita/Core.Media",
+        "parent_name": "media"
+    },
+    {
+        "is_abstract": false,
+        "singular": "link",
+        "name": "links",
+        "description": "Links model",
+        "associations": null,
+        "hidden": null,
+        "enabled": false,
+        "translation_rules": null,
+        "is_translatable": false,
+        "table": "BEdita/Core.Links",
+        "parent_name": "objects"
+    },
+    {
+        "is_abstract": false,
+        "singular": "location",
+        "name": "locations",
+        "description": "Location model with coords",
+        "associations": null,
+        "hidden": null,
+        "enabled": false,
+        "translation_rules": null,
+        "is_translatable": false,
+        "table": "BEdita/Core.Locations",
+        "parent_name": "objects"
+    },
+    {
+        "is_abstract": false,
+        "singular": "mail_template",
+        "name": "mail_templates",
+        "description": "Mail template model",
+        "associations": null,
+        "hidden": null,
+        "enabled": true,
+        "translation_rules": null,
+        "is_translatable": false,
+        "table": "BEdita/Core.Objects",
         "parent_name": "objects"
     },
     {
@@ -55,46 +141,29 @@
     },
     {
         "is_abstract": false,
-        "singular": "image",
-        "name": "images",
-        "description": "Image model",
-        "associations": [
-            "Streams"
-        ],
+        "singular": "news_item",
+        "name": "news",
+        "description": "Generic piece of news",
+        "associations": null,
         "hidden": null,
         "enabled": false,
         "translation_rules": null,
         "is_translatable": false,
-        "table": "BEdita/Core.Media",
-        "parent_name": "media"
+        "table": "BEdita/Core.Objects",
+        "parent_name": "objects"
     },
     {
-        "is_abstract": false,
-        "singular": "file",
-        "name": "files",
-        "description": "Files media model",
-        "associations": [
-            "Streams"
-        ],
-        "hidden": null,
-        "enabled": true,
-        "translation_rules": null,
-        "is_translatable": false,
-        "table": "BEdita/Core.Media",
-        "parent_name": "media"
-    },
-    {
-        "is_abstract": false,
-        "singular": "mail_template",
-        "name": "mail_templates",
-        "description": "Mail template model",
+        "is_abstract": true,
+        "singular": "object",
+        "name": "objects",
+        "description": "Base BEdita object type, to be extended by concrete implementations",
         "associations": null,
         "hidden": null,
         "enabled": true,
         "translation_rules": null,
         "is_translatable": false,
         "table": "BEdita/Core.Objects",
-        "parent_name": "objects"
+        "parent_name": null
     },
     {
         "is_abstract": false,
@@ -103,10 +172,23 @@
         "description": "Generic person profile",
         "associations": null,
         "hidden": null,
-        "enabled": false,
+        "enabled": true,
         "translation_rules": null,
         "is_translatable": false,
         "table": "BEdita/Core.Profiles",
+        "parent_name": "objects"
+    },
+    {
+        "is_abstract": false,
+        "singular": "publication",
+        "name": "publications",
+        "description": "Publications model",
+        "associations": null,
+        "hidden": null,
+        "enabled": false,
+        "translation_rules": null,
+        "is_translatable": false,
+        "table": "BEdita/Core.Publications",
         "parent_name": "objects"
     },
     {
@@ -121,5 +203,20 @@
         "is_translatable": false,
         "table": "BEdita/Core.Users",
         "parent_name": "objects"
+    },
+    {
+        "is_abstract": false,
+        "singular": "video",
+        "name": "videos",
+        "description": "Videos media model",
+        "associations": [
+            "Streams"
+        ],
+        "hidden": null,
+        "enabled": false,
+        "translation_rules": null,
+        "is_translatable": false,
+        "table": "BEdita/Core.Media",
+        "parent_name": "media"
     }
 ]

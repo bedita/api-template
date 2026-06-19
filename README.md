@@ -2,6 +2,8 @@
 
 [![Github Actions](https://github.com/bedita/api-template/workflows/php/badge.svg)](https://github.com/bedita/api-template/actions?query=workflow%3Aphp)
 [![codecov](https://codecov.io/gh/bedita/api-template/branch/master/graph/badge.svg)](https://codecov.io/gh/bedita/api-template)
+[![phpstan](https://img.shields.io/badge/PHPStan-level%209-brightgreen.svg)](https://phpstan.org)
+[![psalm](https://img.shields.io/badge/psalm-level%202-brightgreen.svg)](https://psalm.dev)
 
 This is the skeleton app to build BEdita5 API projects.
 

@@ -59,6 +59,8 @@
             "@migrations",
             "@cache-clear",
             "@project-model",
+            "@cache-clear",
+            "@seeds",
             "@cache-clear"
         ],
         "cache-clear": "bin/cake cache clear_all",
@@ -68,6 +70,9 @@
         ],
         "project-model": [
             "bin/cake project_model"
+        ],
+        "seeds": [
+            "bin/cake migrations seed"
         ]
     },
     "config": {
