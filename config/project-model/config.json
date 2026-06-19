@@ -1,0 +1,163 @@
+[
+    {
+        "name": "I18n",
+        "context": "app",
+        "content": {
+            "languages": {
+                "en": "English",
+                "it": "Italiano"
+            },
+            "default": "it"
+        },
+        "application": "manager"
+    },
+    {
+        "name": "Modules",
+        "context": "app",
+        "content": {
+            "objects": {
+                "color": "#230637",
+                "shortLabel": "obj",
+                "sort": "-modified"
+            },
+            "folders": {
+                "color": "#6FB78B"
+            },
+            "documents": {
+                "color": "#D95700"
+            },
+            "media": {
+                "color": "#a80019"
+            },
+            "images": {
+                "color": "#d5002b"
+            },
+            "files": {
+                "color": "#d5002b"
+            },
+            "users": {
+                "color": "#000000",
+                "annotations": true
+            },
+            "profiles": {
+                "color": "#093"
+            },
+            "mail_templates": {
+                "color": "#8610B3"
+            },
+            "translations": {
+                "color": "#FF00FF"
+            }
+        },
+        "application": "manager"
+    },
+    {
+        "name": "Properties",
+        "context": "app",
+        "content": {
+            "mail_templates": {
+                "filter": [
+                    "status"
+                ],
+                "index": [
+                    "title",
+                    "uname",
+                    "lang"
+                ],
+                "view": {
+                    "core": [
+                        "title",
+                        "body"
+                    ],
+                    "advanced": [
+                        "extra"
+                    ],
+                    "_hide": [
+                        "description"
+                    ]
+                }
+            },
+            "users": {
+                "fastCreate": {
+                    "required": [
+                        "status",
+                        "username"
+                    ],
+                    "all": [
+                        "status",
+                        "username",
+                        "name",
+                        "surname",
+                        "email"
+                    ]
+                },
+                "filter": [
+                    "status",
+                    "roles"
+                ],
+                "index": [
+                    "username",
+                    {
+                        "roles": [
+                            "name"
+                        ]
+                    },
+                    "name",
+                    "surname"
+                ],
+                "view": {
+                    "_keep": [
+                        "password",
+                        "confirm-password"
+                    ],
+                    "core": [
+                        "username",
+                        "password",
+                        "confirm-password",
+                        "name",
+                        "surname",
+                        "email",
+                        "vat_number",
+                        "phone",
+                        "title",
+                        "birthdate"
+                    ],
+                    "address": [
+                        "street_address",
+                        "city",
+                        "zipcode",
+                        "country",
+                        "state_name"
+                    ],
+                    "_hide": [
+                        "description",
+                        "body",
+                        "user_preferences",
+                        "publish_start",
+                        "publish_end",
+                        "person_title",
+                        "deathdate",
+                        "company",
+                        "company_name",
+                        "company_kind",
+                        "website",
+                        "national_id_number",
+                        "pseudonym"
+                    ],
+                    "advanced": [
+                        "extra"
+                    ]
+                }
+            }
+        },
+        "application": "manager"
+    },
+    {
+        "name": "Status",
+        "context": "core",
+        "content": {
+            "level": "on"
+        },
+        "application": "default"
+    }
+]
