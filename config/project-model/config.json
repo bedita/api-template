@@ -120,7 +120,6 @@
                         "vat_number",
                         "phone",
                         "title",
-                        "gender",
                         "birthdate"
                     ],
                     "address": [
