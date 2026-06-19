@@ -1,0 +1,32 @@
+[
+    {
+        "name": "async_jobs",
+        "description": "Async jobs endpoint",
+        "enabled": true
+    },
+    {
+        "name": "auth",
+        "description": "Authentication endpoint",
+        "enabled": true
+    },
+    {
+        "name": "config",
+        "description": "Configuration endpoint",
+        "enabled": true
+    },
+    {
+        "name": "files",
+        "description": "Files endpoint",
+        "enabled": true
+    },
+    {
+        "name": "folders",
+        "description": "Folders endpoint",
+        "enabled": true
+    },
+    {
+        "name": "images",
+        "description": "Images endpoint",
+        "enabled": true
+    }
+]
