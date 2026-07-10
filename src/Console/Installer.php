@@ -25,6 +25,7 @@ use Cake\Utility\Security;
 use Composer\IO\IOInterface;
 use Composer\Script\Event;
 use Exception;
+use JsonException;
 
 /**
  * Provides installation hooks for when this application is installed through
@@ -122,7 +123,7 @@ class Installer
         }
         try {
             $decoded = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
+        } catch (JsonException $e) {
             throw new Exception(sprintf('Invalid JSON in %s: %s', $composerJson, $e->getMessage()), 0, $e);
         }
         unset($decoded['require']['bedita/mail']);
