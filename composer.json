@@ -9,14 +9,13 @@
         "bedita/api": "^6.8.0",
         "bedita/core": "^6.8.0",
         "bedita/mail": "^1.0",
-        "cakephp/cakephp": "~5.3.2",
         "cakephp/plugin-installer": "^2.0"
     },
     "require-dev": {
-        "bedita/dev-tools": "^3.2",
+        "bedita/dev-tools": "^3.0",
         "cakephp/bake": "^3.5.0",
         "cakephp/cakephp-codesniffer": "^5.0",
-        "cakephp/debug_kit": "^5.3.0",
+        "cakephp/debug_kit": "^5.0",
         "cakephp/repl": "^2.0.1",
         "dereuromark/cakephp-ide-helper": "^2.5.3",
         "josegonzalez/dotenv": "^4.0",
