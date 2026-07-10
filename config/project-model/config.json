@@ -158,6 +158,6 @@
         "content": {
             "level": "on"
         },
-        "application": "default"
+        "application": "app"
     }
 ]

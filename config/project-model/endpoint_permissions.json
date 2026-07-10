@@ -1,7 +1,7 @@
 [
     {
         "endpoint_name": null,
-        "application_name": "default",
+        "application_name": "app",
         "role_name": null,
         "read": false,
         "write": false
@@ -15,7 +15,7 @@
     },
     {
         "endpoint_name": "auth",
-        "application_name": "default",
+        "application_name": "app",
         "role_name": "admin",
         "read": true,
         "write": true
