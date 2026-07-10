@@ -18,6 +18,8 @@ use BEdita\API\Controller\ErrorController as BEditaErrorController;
 
 /**
  * Error controller
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class ErrorController extends BEditaErrorController
 {
