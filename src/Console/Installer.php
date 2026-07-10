@@ -91,7 +91,7 @@ class Installer
             if (in_array($arg, ['Y', 'y', 'N', 'n'])) {
                 return $arg;
             }
-            throw new Exception('This is not a valid answer. Please choose Y or n.');
+            throw new Exception('This is not a valid answer. Please choose Y or N.');
         };
 
         $includeMail = $io->askAndValidate(
@@ -116,7 +116,15 @@ class Installer
     protected static function removeMailPlugin(string $dir, IOInterface $io): void
     {
         $composerJson = $dir . '/composer.json';
-        $decoded = json_decode((string)file_get_contents($composerJson), true);
+        $raw = file_get_contents($composerJson);
+        if ($raw === false) {
+            throw new Exception(sprintf('Unable to read %s', $composerJson));
+        }
+        try {
+            $decoded = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new Exception(sprintf('Invalid JSON in %s: %s', $composerJson, $e->getMessage()), 0, $e);
+        }
         unset($decoded['require']['bedita/mail']);
         file_put_contents(
             $composerJson,
@@ -126,7 +134,7 @@ class Installer
 
         $pluginsFile = $dir . '/config/plugins.php';
         $content = (string)file_get_contents($pluginsFile);
-        $content = str_replace("    'BEdita/Mail' => ['bootstrap' => true, 'routes' => true],\n", '', $content);
+        $content = preg_replace("/^\\s*'BEdita\\/Mail' => \\['bootstrap' => true, 'routes' => true\\],\\R/m", '', $content);
         file_put_contents($pluginsFile, $content);
         $io->write('Removed <info>BEdita/Mail</info> from config/plugins.php');
 
