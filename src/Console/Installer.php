@@ -65,9 +65,72 @@ class Installer
         static::setFolderPermissions($rootDir, $io);
         static::setSecuritySalt($rootDir, $io);
 
+        if ($event->getName() === 'post-create-project-cmd') {
+            static::askForMailPlugin($rootDir, $io);
+        }
+
         if (class_exists(CodeceptionInstaller::class)) {
             CodeceptionInstaller::customizeCodeceptionBinary($event);
         }
+    }
+
+    /**
+     * Ask if the BEdita/Mail plugin should be included, and remove it if not.
+     *
+     * @param string $dir The application's root directory.
+     * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @return void
+     */
+    public static function askForMailPlugin(string $dir, IOInterface $io): void
+    {
+        if (!$io->isInteractive()) {
+            return;
+        }
+
+        $validator = function ($arg) {
+            if (in_array($arg, ['Y', 'y', 'N', 'n'])) {
+                return $arg;
+            }
+            throw new Exception('This is not a valid answer. Please choose Y or n.');
+        };
+
+        $includeMail = $io->askAndValidate(
+            '<info>Include BEdita/Mail plugin? (Default to Y)</info> [<comment>Y,n</comment>]? ',
+            $validator,
+            10,
+            'Y',
+        );
+
+        if (in_array($includeMail, ['n', 'N'])) {
+            static::removeMailPlugin($dir, $io);
+        }
+    }
+
+    /**
+     * Remove bedita/mail from composer.json and config/plugins.php.
+     *
+     * @param string $dir The application's root directory.
+     * @param \Composer\IO\IOInterface $io IO interface to write to console.
+     * @return void
+     */
+    protected static function removeMailPlugin(string $dir, IOInterface $io): void
+    {
+        $composerJson = $dir . '/composer.json';
+        $decoded = json_decode((string)file_get_contents($composerJson), true);
+        unset($decoded['require']['bedita/mail']);
+        file_put_contents(
+            $composerJson,
+            json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n",
+        );
+        $io->write('Removed <info>bedita/mail</info> from composer.json');
+
+        $pluginsFile = $dir . '/config/plugins.php';
+        $content = (string)file_get_contents($pluginsFile);
+        $content = str_replace("    'BEdita/Mail' => ['bootstrap' => true, 'routes' => true],\n", '', $content);
+        file_put_contents($pluginsFile, $content);
+        $io->write('Removed <info>BEdita/Mail</info> from config/plugins.php');
+
+        $io->write('<comment>Run `composer update` to remove bedita/mail from vendor.</comment>');
     }
 
     /**
